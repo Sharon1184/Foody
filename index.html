@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kibandaski Deliveries</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-utensils"></i> Kibandaski Deliveries</h1>
+    <nav>
+      <input type="text" id="searchInput" placeholder="Search food...">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="featured">
+      <h2>Featured Foods</h2>
+      <div id="featured-container" class="card-grid"></div>
+    </section>
+
+    <section id="categories">
+      <h2>Food Categories</h2>
+      <div class="category-buttons">
+        <button onclick="filterByCategory('All')">All</button>
+        <button onclick="filterByCategory('Main')">Main</button>
+        <button onclick="filterByCategory('Drinks')">Drinks</button>
+        <button onclick="filterByCategory('Snacks')">Snacks</button>
+      </div>
+    </section>
+
+    <section id="menu-wrapper">
+      <h2>Menu</h2>
+      <div id="food-list" class="card-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Kibandaski Deliveries. All rights reserved.</p>
+  </footer>
+
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+        </html>
