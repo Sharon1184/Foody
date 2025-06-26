@@ -1,47 +1,37 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Kibandaski Deliveries</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodHub - Food Delivery Service</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B35',
+            secondary: '#3A86FF',
+          },
+          borderRadius: {
+            button: '8px'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <header>
-    <h1><i class="fas fa-utensils"></i> Kibandaski Deliveries</h1>
-    <nav>
-      <input type="text" id="searchInput" placeholder="Search food...">
-      <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
-    </nav>
-  </header>
-
-  <main>
-    <section id="featured">
-      <h2>Featured Foods</h2>
-      <div id="featured-container" class="card-grid"></div>
-    </section>
-
-    <section id="categories">
-      <h2>Food Categories</h2>
-      <div class="category-buttons">
-        <button onclick="filterByCategory('All')">All</button>
-        <button onclick="filterByCategory('Main')">Main</button>
-        <button onclick="filterByCategory('Drinks')">Drinks</button>
-        <button onclick="filterByCategory('Snacks')">Snacks</button>
-      </div>
-    </section>
-
-    <section id="menu-wrapper">
-      <h2>Menu</h2>
-      <div id="food-list" class="card-grid"></div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Kibandaski Deliveries. All rights reserved.</p>
-  </footer>
-
-  <script src="firebase-config.js"></script>
-  <script src="app.js"></script>
+<body class="bg-gray-50 min-h-screen font-['Inter']">
+  <!-- Dynamic Components -->
+  <div id="header"></div>
+  <div id="hero"></div>
+  <div id="filters"></div>
+  <div id="featured-restaurants"></div>
+  <script src="js/app.js"></script>
 </body>
-        </html>
+</html>
