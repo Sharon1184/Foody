@@ -2,92 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kibandaski Deliveries - Local Food to Your Doorstep</title>
-  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2E7D32', // Kibandaski green
-            secondary: '#FFB300' // Accent yellow
-          },
-          borderRadius: {
-            button: '8px'
-          }
-        }
-      }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FoodHub - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.0.0/remixicon.min.js"></script>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Firebase config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDD6T6mBhR5p7piN_v0gPvOHN7RUE2qDeA",
+      authDomain: "food-ae7ff.firebaseapp.com",
+      projectId: "food-ae7ff",
+      storageBucket: "food-ae7ff.appspot.com",
+      messagingSenderId: "47650948987",
+      appId: "1:47650948987:web:ae83060f18c852f9d24eb2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const foodList = document.getElementById("food-list");
+
+    async function loadFoods() {
+      const querySnapshot = await getDocs(collection(db, "foods"));
+      querySnapshot.forEach((doc) => {
+        const food = doc.data();
+        const foodItem = document.createElement("div");
+        foodItem.className = "bg-white rounded-lg shadow p-3";
+        foodItem.innerHTML = `
+          <img src="${food.imageUrl}" alt="${food.name}" class="w-full h-40 object-cover rounded-md mb-2" />
+          <h3 class="text-lg font-bold">${food.name}</h3>
+          <p class="text-sm text-gray-500 mb-1">${food.restaurant || "Restaurant"}</p>
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-primary font-semibold">Ksh ${food.price}</span>
+            <button class="bg-primary text-white px-3 py-1 rounded-full text-xs">Add to Cart</button>
+          </div>
+        `;
+        foodList.appendChild(foodItem);
+      });
     }
+
+    loadFoods();
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 </head>
-<body class="bg-gray-50 min-h-screen font-['Inter']">
+<body class="bg-gray-50 text-gray-800">
 
-<!-- Header -->
-<header class="bg-white shadow-sm sticky top-0 z-50">
-  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center">
-      <a href="#" class="text-3xl font-['Pacifico'] text-primary">Kibandaski</a>
-    </div>
-    <div class="relative flex-1 max-w-xl mx-8">
-      <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-        <i class="ri-search-line text-gray-400"></i>
-      </div>
-      <input type="text" class="search-input w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
-    </div>
-    <div class="flex items-center space-x-6">
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-map-pin-line w-6 h-6"></i>
-        <span class="ml-1 font-medium text-sm">Nairobi</span>
-        <i class="ri-arrow-down-s-line ml-1 w-4 h-4"></i>
-      </button>
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-user-line w-6 h-6"></i>
-      </button>
-      <button class="relative flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-shopping-cart-line w-6 h-6"></i>
-        <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="border-t border-gray-100">
-    <div class="container mx-auto px-4 py-2">
-      <div class="flex items-center space-x-8 overflow-x-auto scrollbar-hide" id="categoryNav">
-        <a href="#" class="text-primary font-medium text-sm whitespace-nowrap py-2 border-b-2 border-primary">All</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Chapo</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Kienyeji</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Nyama</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Snacks</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Mandazi</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Juice</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Ugali</a>
+  <!-- Header -->
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-primary">FoodHub</h1>
+      <div class="flex items-center space-x-4">
+        <i class="ri-map-pin-line text-lg"></i>
+        <span class="text-sm">Kenya</span>
+        <i class="ri-user-line text-xl"></i>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- Hero Section -->
-<section class="relative">
-  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1661519096828-c2c011d1d42b?auto=format&fit=crop&w=1600&h=600');"></div>
-  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-  <div class="relative container mx-auto px-4 py-20">
-    <div class="max-w-xl">
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Order Local. Eat Fresh.</h1>
-      <p class="text-xl text-white opacity-90 mb-8">From your favourite vibanda to your doorstep — all in one tap!</p>
-      <div class="bg-white p-4 rounded-lg shadow-lg">
-        <div class="flex items-center mb-4">
-          <i class="ri-map-pin-line text-primary w-6 h-6"></i>
-          <span class="ml-2 font-medium">Delivery Location</span>
-        </div>
-        <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
-          <input type="text" class="flex-1 px-4 py-3 border border-gray-200 rounded text-sm" placeholder="Enter your estate or stage...">
-          <button class="bg-primary text-white px-6 py-3 rounded-button font-medium whitespace-nowrap">Find Vendors</button>
-        </div>
-      </div>
+  <!-- Hero -->
+  <section class="bg-primary text-white px-4 py-10 text-center">
+    <h2 class="text-3xl font-bold mb-2">Local Foods Delivered</h2>
+    <p class="text-sm opacity-90">Get your favorite Kenyan meals delivered fast & fresh.</p>
+  </section>
+
+  <!-- Food List -->
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <h2 class="text-xl font-semibold mb-4">Available Foods</h2>
+    <div id="food-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <!-- Foods will be loaded here -->
     </div>
-  </div>
-    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-inner z-50">
+    <div class="flex justify-around items-center py-2 text-sm text-gray-600">
+      <a href="index.html" class="flex flex-col items-center hover:text-primary">
+        <i class="ri-home-5-line text-xl"></i>
+        <span>Home</span>
+      </a>
+      <a href="orders.html" class="flex flex-col items-center hover:text-primary">
+        <i class="ri-restaurant-line text-xl"></i>
+        <span>Orders</span>
+      </a>
+      <a href="cart.html" class="flex flex-col items-center hover:text-primary relative">
+        <i class="ri-shopping-cart-line text-xl"></i>
+        <span>Cart</span>
+        <span class="absolute top-0 right-0 text-[10px] bg-primary text-white rounded-full px-1">3</span>
+      </a>
+      <a href="profile.html" class="flex flex-col items-center hover:text-primary">
+        <i class="ri-user-line text-xl"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
+</body>
+</html>
