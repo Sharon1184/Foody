@@ -10,8 +10,8 @@
       theme: {
         extend: {
           colors: {
-            primary: '#2E7D32', // Kibandaski green
-            secondary: '#FFB300' // Accent yellow
+            primary: '#2E7D32', // Green
+            secondary: '#FFB300', // Accent yellow
           },
           borderRadius: {
             button: '8px'
@@ -23,48 +23,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <script type="module" src="app.js" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen font-['Inter']">
 
 <!-- Header -->
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center">
-      <a href="#" class="text-3xl font-['Pacifico'] text-primary">Kibandaski</a>
-    </div>
+    <a href="#" class="text-3xl font-['Pacifico'] text-primary">Kibandaski</a>
     <div class="relative flex-1 max-w-xl mx-8">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3">
         <i class="ri-search-line text-gray-400"></i>
       </div>
-      <input type="text" class="search-input w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
+      <input type="text" id="searchInput" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
     </div>
     <div class="flex items-center space-x-6">
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
+      <a href="#" class="flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-map-pin-line w-6 h-6"></i>
         <span class="ml-1 font-medium text-sm">Nairobi</span>
         <i class="ri-arrow-down-s-line ml-1 w-4 h-4"></i>
-      </button>
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
+      </a>
+      <a href="profile.html" class="flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-user-line w-6 h-6"></i>
-      </button>
-      <button class="relative flex items-center text-gray-700 hover:text-primary transition">
+      </a>
+      <a href="cart.html" class="relative flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-shopping-cart-line w-6 h-6"></i>
-        <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
-      </button>
+        <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center" id="cart-count">0</span>
+      </a>
     </div>
   </div>
 
+  <!-- Page Nav Links -->
   <div class="border-t border-gray-100">
     <div class="container mx-auto px-4 py-2">
-      <div class="flex items-center space-x-8 overflow-x-auto scrollbar-hide" id="categoryNav">
-        <a href="#" class="text-primary font-medium text-sm whitespace-nowrap py-2 border-b-2 border-primary">All</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Chapo</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Kienyeji</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Nyama</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Snacks</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Mandazi</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Juice</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-primary transition">Ugali</a>
+      <div class="flex items-center space-x-6 overflow-x-auto scrollbar-hide" id="categoryNav">
+        <a href="index.html" class="text-primary font-medium text-sm py-2 border-b-2 border-primary">Home</a>
+        <a href="orders.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Orders</a>
+        <a href="cart.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Cart</a>
+        <a href="vendors.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Vendors</a>
+        <a href="profile.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Account</a>
       </div>
     </div>
   </div>
@@ -92,54 +89,15 @@
   </div>
 </section>
 
-<!-- Food Section -->
-<section class="px-4 py-8 max-w-6xl mx-auto">
-  <h2 class="text-xl font-semibold mb-4 text-gray-800">Available Foods</h2>
-  <div id="menu-wrapper" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-    <!-- Foods will load here from Firebase -->
+<!-- Food List -->
+<section class="py-10">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6">Available Meals</h2>
+    <div id="food-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Food items will be inserted here by JS -->
+    </div>
   </div>
 </section>
 
-<!-- Firebase JS -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDD6T6mBhR5p7piN_v0gPvOHN7RUE2qDeA",
-    authDomain: "food-ae7ff.firebaseapp.com",
-    projectId: "food-ae7ff",
-    storageBucket: "food-ae7ff.appspot.com",
-    messagingSenderId: "47650948987",
-    appId: "1:47650948987:web:ae83060f18c852f9d24eb2"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  const foodList = document.getElementById("menu-wrapper");
-
-  async function loadFoods() {
-    const querySnapshot = await getDocs(collection(db, "foods"));
-    querySnapshot.forEach((doc) => {
-      const food = doc.data();
-      const card = document.createElement("div");
-      card.className = "bg-white rounded-lg shadow p-3";
-      card.innerHTML = `
-        <img src="${food.imageUrl}" alt="${food.name}" class="w-full h-40 object-cover rounded mb-2" />
-        <h3 class="text-base font-semibold text-gray-900">${food.name}</h3>
-        <p class="text-xs text-gray-500 mb-1">${food.restaurant || "Vendor"}</p>
-        <div class="flex justify-between items-center mt-2">
-          <span class="text-primary font-semibold text-sm">Ksh ${food.price}</span>
-          <button class="bg-primary text-white text-xs px-3 py-1 rounded">Add</button>
-        </div>
-      `;
-      foodList.appendChild(card);
-    });
-  }
-
-  window.addEventListener("DOMContentLoaded", loadFoods);
-</script>
-
 </body>
-          </html>
+</html>
