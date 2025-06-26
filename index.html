@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +10,7 @@
         extend: {
           colors: {
             primary: '#2E7D32', // Green
-            secondary: '#FFB300', // Accent yellow
+            secondary: '#FFB300' // Yellow
           },
           borderRadius: {
             button: '8px'
@@ -23,55 +22,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-  <script type="module" src="app.js" defer></script>
 </head>
-<body class="bg-gray-50 min-h-screen font-['Inter']">
-
-<!-- Header -->
-<header class="bg-white shadow-sm sticky top-0 z-50">
+<body class="bg-gray-50 min-h-screen font-['Inter']"><!-- Header --><header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="container mx-auto px-4 py-4 flex items-center justify-between">
     <a href="#" class="text-3xl font-['Pacifico'] text-primary">Kibandaski</a>
     <div class="relative flex-1 max-w-xl mx-8">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3">
         <i class="ri-search-line text-gray-400"></i>
       </div>
-      <input type="text" id="searchInput" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
+      <input type="text" class="search-input w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
     </div>
     <div class="flex items-center space-x-6">
-      <a href="#" class="flex items-center text-gray-700 hover:text-primary transition">
+      <button class="flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-map-pin-line w-6 h-6"></i>
         <span class="ml-1 font-medium text-sm">Nairobi</span>
         <i class="ri-arrow-down-s-line ml-1 w-4 h-4"></i>
-      </a>
-      <a href="profile.html" class="flex items-center text-gray-700 hover:text-primary transition">
+      </button>
+      <button class="flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-user-line w-6 h-6"></i>
-      </a>
-      <a href="cart.html" class="relative flex items-center text-gray-700 hover:text-primary transition">
+      </button>
+      <button class="relative flex items-center text-gray-700 hover:text-primary transition">
         <i class="ri-shopping-cart-line w-6 h-6"></i>
-        <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center" id="cart-count">0</span>
-      </a>
+        <span class="absolute -top-1 -right-1 bg-secondary text-black text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
+      </button>
     </div>
   </div>
-
-  <!-- Page Nav Links -->
   <div class="border-t border-gray-100">
     <div class="container mx-auto px-4 py-2">
-      <div class="flex items-center space-x-6 overflow-x-auto scrollbar-hide" id="categoryNav">
-        <a href="index.html" class="text-primary font-medium text-sm py-2 border-b-2 border-primary">Home</a>
-        <a href="orders.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Orders</a>
-        <a href="cart.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Cart</a>
-        <a href="vendors.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Vendors</a>
-        <a href="profile.html" class="text-gray-600 font-medium text-sm py-2 hover:text-primary transition">Account</a>
+      <div class="flex items-center space-x-8 overflow-x-auto scrollbar-hide" id="categoryNav">
+        <a href="#" class="text-secondary font-medium text-sm whitespace-nowrap py-2 border-b-2 border-secondary">All</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Chapo</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Kienyeji</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Nyama</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Snacks</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Mandazi</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Juice</a>
+        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Ugali</a>
       </div>
     </div>
   </div>
-</header>
-
-<!-- Hero Section -->
-<section class="relative">
-  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1661519096828-c2c011d1d42b?auto=format&fit=crop&w=1600&h=600');"></div>
-  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-  <div class="relative container mx-auto px-4 py-20">
+</header><!-- Hero Section with slideshow --><section class="relative h-[500px] overflow-hidden">
+  <div id="slideshow" class="absolute inset-0 w-full h-full z-0"></div>
+  <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+  <div class="relative z-20 container mx-auto px-4 py-20">
     <div class="max-w-xl">
       <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Order Local. Eat Fresh.</h1>
       <p class="text-xl text-white opacity-90 mb-8">From your favourite vibanda to your doorstep — all in one tap!</p>
@@ -82,22 +75,52 @@
         </div>
         <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
           <input type="text" class="flex-1 px-4 py-3 border border-gray-200 rounded text-sm" placeholder="Enter your estate or stage...">
-          <button class="bg-primary text-white px-6 py-3 rounded-button font-medium whitespace-nowrap">Find Vendors</button>
+          <button class="bg-secondary text-black px-6 py-3 rounded-button font-medium hover:bg-primary hover:text-white transition">Find Vendors</button>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-<!-- Food List -->
-<section class="py-10">
-  <div class="container mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">Available Meals</h2>
-    <div id="food-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Food items will be inserted here by JS -->
-    </div>
+</section><!-- Food Items (will be inserted via Firebase) --><section class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Available Foods</h2>
+  <div id="food-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- Firebase food items will be loaded here by app.js -->
   </div>
-</section>
+</section><!-- Footer Navigation --><footer class="bg-white shadow-t border-t border-gray-100 mt-8">
+  <div class="container mx-auto px-4 py-4 flex justify-around">
+    <a href="#" class="text-primary hover:text-secondary flex flex-col items-center">
+      <i class="ri-home-4-line text-2xl"></i>
+      <span class="text-xs mt-1">Home</span>
+    </a>
+    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
+      <i class="ri-heart-line text-2xl"></i>
+      <span class="text-xs mt-1">Favourites</span>
+    </a>
+    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
+      <i class="ri-shopping-bag-line text-2xl"></i>
+      <span class="text-xs mt-1">Orders</span>
+    </a>
+    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
+      <i class="ri-user-line text-2xl"></i>
+      <span class="text-xs mt-1">Profile</span>
+    </a>
+  </div>
+</footer><script>
+  // Simple slideshow
+  const images = [
+    'https://images.unsplash.com/photo-1661519096828-c2c011d1d42b?auto=format&fit=crop&w=1600&h=600',
+    'https://images.unsplash.com/photo-1571091718767-18b4d92b6220?auto=format&fit=crop&w=1600&h=600',
+    'https://images.unsplash.com/photo-1586182987324-4b1dd3ff70a7?auto=format&fit=crop&w=1600&h=600'
+  ];
 
-</body>
-</html>
+  let index = 0;
+  const slideshow = document.getElementById('slideshow');
+  function updateSlide() {
+    slideshow.style.backgroundImage = `url(${images[index]})`;
+    slideshow.style.backgroundSize = 'cover';
+    slideshow.style.backgroundPosition = 'center';
+    index = (index + 1) % images.length;
+  }
+  updateSlide();
+  setInterval(updateSlide, 5000);
+</script><!-- Firebase App.js will load Firebase and fetch foods here --><script src="app.js"></script></body>
+  </html>
