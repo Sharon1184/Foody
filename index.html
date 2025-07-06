@@ -1,126 +1,741 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kibandaski Deliveries - Local Food to Your Doorstep</title>
-  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2E7D32', // Green
-            secondary: '#FFB300' // Yellow
-          },
-          borderRadius: {
-            button: '8px'
-          }
-        }
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DineDash - Food Delivery</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primarycolor: #ff6b00; /* Jumia orange */
+      --secondarycolor: #ffc107;
+    
+      --whitecolor: #fff;
+      --blackcolor: #222;
+      --softcolor: #f5f5f5;
+      --darkgreycolor: #a7a7a7;
+      --greycolor: #f5f5f5;
+      --jumia-bg: #f5f5f5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--jumia-bg);
+    }
+
+    /* Top Banner */
+    .top-banner {
+      background: linear-gradient(to right, #ff6b00, #ff8c00);
+      color: white;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .top-banner-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Main Header */
+    .main-header {
+      background-color: white;
+      padding: 15px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      color: var(--primarycolor);
+      font-weight: bold;
+      font-size: 28px;
+      text-decoration: none;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid var(--primarycolor);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      background-color: var(--primarycolor);
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .action-item i {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .cart-badge {
+      position: relative;
+    }
+
+    .cart-badge::after {
+      content: '3';
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--primarycolor);
+      color: white;
+      font-size: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Category Navigation */
+    .category-nav {
+      background-color: white;
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .category-item {
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .category-item:hover, .category-item.active {
+      background-color: var(--primarycolor);
+      color: white;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 60px 0;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .banner-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .banner-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+
+    .banner-btn {
+      background-color: var(--primarycolor);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Quick Links */
+    .quick-links {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .quick-link-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .quick-link-icon {
+      width: 60px;
+      height: 60px;
+      background-color: var(--softcolor);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .quick-link-icon i {
+      font-size: 24px;
+      color: var(--primarycolor);
+    }
+
+    .quick-link-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Flash Sales */
+    .flash-sales {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .countdown {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .countdown-box {
+      background-color: #333;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+      height: 150px;
+      width: 100%;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: var(--primarycolor);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 14px;
+      height: 40px;
+      overflow: hidden;
+    }
+
+    .product-price {
+      color: var(--primarycolor);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .rating {
+      color: #ffc107;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    .add-to-cart {
+      background-color: var(--primarycolor);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background-color: #e05d00;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: var(--primarycolor);
+      color: var(--whitecolor);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2%;
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .sidebar-menus {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-menus a {
+      padding: 12px 15px;
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--whitecolor);
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    .sidebar-menus a:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    .sidebar-menus ion-icon {
+      font-size: 20px;
+    }
+
+    .menu-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1100;
+      font-size: 24px;
+      padding: 10px;
+      background-color: var(--whitecolor);
+      color: var(--primarycolor);
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* Dashboard Content */
+    .dashboard {
+      padding: 20px;
+      margin-left: 0;
+      transition: margin-left 0.3s;
+    }
+
+    .dashboard.with-sidebar {
+      margin-left: 250px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .dashboard.with-sidebar {
+        margin-left: 0;
+      }
+      
+      .menu-toggle {
+        display: block;
+      }
+      
+      .search-container {
+        margin: 15px 0;
+      }
+      
+      .header-actions {
+        justify-content: center;
+        width: 100%;
+      }
+      
+      .category-nav {
+        overflow-x: auto;
+        white-space: nowrap;
       }
     }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-</head>
-<body class="bg-gray-50 min-h-screen font-['Inter']"><!-- Header --><header class="bg-white shadow-sm sticky top-0 z-50">
-  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <a href="#" class="text-3xl font-['Pacifico'] text-primary">Kibandaski</a>
-    <div class="relative flex-1 max-w-xl mx-8">
-      <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-        <i class="ri-search-line text-gray-400"></i>
-      </div>
-      <input type="text" class="search-input w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm" placeholder="Search for meals or vendors...">
-    </div>
-    <div class="flex items-center space-x-6">
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-map-pin-line w-6 h-6"></i>
-        <span class="ml-1 font-medium text-sm">Nairobi</span>
-        <i class="ri-arrow-down-s-line ml-1 w-4 h-4"></i>
-      </button>
-      <button class="flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-user-line w-6 h-6"></i>
-      </button>
-      <button class="relative flex items-center text-gray-700 hover:text-primary transition">
-        <i class="ri-shopping-cart-line w-6 h-6"></i>
-        <span class="absolute -top-1 -right-1 bg-secondary text-black text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
-      </button>
-    </div>
-  </div>
-  <div class="border-t border-gray-100">
-    <div class="container mx-auto px-4 py-2">
-      <div class="flex items-center space-x-8 overflow-x-auto scrollbar-hide" id="categoryNav">
-        <a href="#" class="text-secondary font-medium text-sm whitespace-nowrap py-2 border-b-2 border-secondary">All</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Chapo</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Kienyeji</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Nyama</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Snacks</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Mandazi</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Juice</a>
-        <a href="#" class="text-gray-600 font-medium text-sm whitespace-nowrap py-2 hover:text-secondary transition">Ugali</a>
-      </div>
-    </div>
-  </div>
-</header><!-- Hero Section with slideshow --><section class="relative h-[500px] overflow-hidden">
-  <div id="slideshow" class="absolute inset-0 w-full h-full z-0"></div>
-  <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
-  <div class="relative z-20 container mx-auto px-4 py-20">
-    <div class="max-w-xl">
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Order Local. Eat Fresh.</h1>
-      <p class="text-xl text-white opacity-90 mb-8">From your favourite vibanda to your doorstep — all in one tap!</p>
-      <div class="bg-white p-4 rounded-lg shadow-lg">
-        <div class="flex items-center mb-4">
-          <i class="ri-map-pin-line text-primary w-6 h-6"></i>
-          <span class="ml-2 font-medium">Delivery Location</span>
-        </div>
-        <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
-          <input type="text" class="flex-1 px-4 py-3 border border-gray-200 rounded text-sm" placeholder="Enter your estate or stage...">
-          <button class="bg-secondary text-black px-6 py-3 rounded-button font-medium hover:bg-primary hover:text-white transition">Find Vendors</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section><!-- Food Items (will be inserted via Firebase) --><section class="container mx-auto px-4 py-8">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6">Available Foods</h2>
-  <div id="food-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- Firebase food items will be loaded here by app.js -->
-  </div>
-</section><!-- Footer Navigation --><footer class="bg-white shadow-t border-t border-gray-100 mt-8">
-  <div class="container mx-auto px-4 py-4 flex justify-around">
-    <a href="#" class="text-primary hover:text-secondary flex flex-col items-center">
-      <i class="ri-home-4-line text-2xl"></i>
-      <span class="text-xs mt-1">Home</span>
-    </a>
-    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
-      <i class="ri-heart-line text-2xl"></i>
-      <span class="text-xs mt-1">Favourites</span>
-    </a>
-    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
-      <i class="ri-shopping-bag-line text-2xl"></i>
-      <span class="text-xs mt-1">Orders</span>
-    </a>
-    <a href="#" class="text-gray-600 hover:text-secondary flex flex-col items-center">
-      <i class="ri-user-line text-2xl"></i>
-      <span class="text-xs mt-1">Profile</span>
-    </a>
-  </div>
-</footer><script>
-  // Simple slideshow
-  const images = [
-    'https://images.unsplash.com/photo-1661519096828-c2c011d1d42b?auto=format&fit=crop&w=1600&h=600',
-    'https://images.unsplash.com/photo-1571091718767-18b4d92b6220?auto=format&fit=crop&w=1600&h=600',
-    'https://images.unsplash.com/photo-1586182987324-4b1dd3ff70a7?auto=format&fit=crop&w=1600&h=600'
-  ];
 
-  let index = 0;
-  const slideshow = document.getElementById('slideshow');
-  function updateSlide() {
-    slideshow.style.backgroundImage = `url(${images[index]})`;
-    slideshow.style.backgroundSize = 'cover';
-    slideshow.style.backgroundPosition = 'center';
-    index = (index + 1) % images.length;
-  }
-  updateSlide();
-  setInterval(updateSlide, 5000);
-</script><!-- Firebase App.js will load Firebase and fetch foods here --><script src="app.js"></script></body>
-  </html>
+    @media (max-width: 768px) {
+      .banner-title {
+        font-size: 1.8rem;
+      }
+      
+      .banner-subtitle {
+        font-size: 1rem;
+      }
+      
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+    @media (max-width: 576px) {
+      .top-banner-content {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .banner-title {
+        font-size: 1.5rem;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Banner -->
+  <div class="top-banner">
+    <div class="container">
+      <div class="top-banner-content">
+        <div>Still Your Year! Get Your Favorite Meals Delivered Fast!</div>
+        <button class="btn btn-sm btn-light">ORDER NOW</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-2 col-md-3 col-6">
+          <a href="#" class="logo">DineDash</a>
+        </div>
+        <div class="col-lg-6 col-md-5">
+          <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search restaurants, dishes...">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-6">
+          <div class="header-actions">
+            <a href="#" class="action-item">
+              <i class="fas fa-user"></i>
+              <span>Account</span>
+            </a>
+            <a href="#" class="action-item">
+              <i class="fas fa-question-circle"></i>
+              <span>Help</span>
+            </a>
+            <a href="cart.html" class="action-item cart-badge">
+              <i class="fas fa-shopping-cart"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Category Navigation -->
+  <nav class="category-nav">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="category-item active">All Menus</a>
+      <a href="#" class="category-item">Burgers</a>
+      <a href="#" class="category-item">Pizza</a>
+      <a href="#" class="category-item">African</a>
+      <a href="#" class="category-item">Asian</a>
+      <a href="#" class="category-item">Desserts</a>
+      <a href="#" class="category-item">Drinks</a>
+      <a href="#" class="category-item">Healthy</a>
+      <a href="#" class="category-item">Fast Food</a>
+    </div>
+  </nav>
+
+  <!-- Sidebar Toggle -->
+  <div class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div>
+      <div class="sidebar-logo">DineDash</div>
+      <div class="sidebar-menus">
+        <a href="index.html"><ion-icon name="storefront-outline"></ion-icon> Home</a>
+        <a href="admin-orders.html"><ion-icon name="receipt-outline"></ion-icon> Bills</a>
+        <a href="#"><ion-icon name="wallet-outline"></ion-icon> Wallet</a>
+        <a href="#"><ion-icon name="notifications-outline"></ion-icon> Notifications</a>
+        <a href="#"><ion-icon name="chatbubbles-outline"></ion-icon> Contact Us</a>
+        <a href="add-food.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin</a>
+        <a href="#"><ion-icon name="log-out-outline"></ion-icon> Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard" id="dashboard">
+    <div class="container">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="row">
+          <div class="col-md-6">
+            <h1 class="banner-title">Still Your Year</h1>
+            <p class="banner-subtitle">Get your favorite meals delivered in under 30 minutes</p>
+            <button class="banner-btn">ORDER NOW</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="quick-links">
+        <div class="row">
+          <div class="col-md-3 col-6 mb-4">
+            <div class="quick-link-item">
+              <div class="quick-link-icon">
+                <i class="fas fa-headset"></i>
+              </div>
+              <div class="quick-link-title">HELP CENTER</div>
+              <div class="quick-link-desc">24/7 Customer Support</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <div class="quick-link-item">
+              <div class="quick-link-icon">
+                <i class="fas fa-store"></i>
+              </div>
+              <div class="quick-link-title">FOR RESTAURANTS</div>
+              <div class="quick-link-desc">Join Our Platform</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <div class="quick-link-item">
+              <div class="quick-link-icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div class="quick-link-title">CALL/WHATSAPP</div>
+              <div class="quick-link-desc">0711 011 011</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <div class="quick-link-item">
+              <div class="quick-link-icon">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div class="quick-link-title">LOYALTY PROGRAM</div>
+              <div class="quick-link-desc">Earn Rewards</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash Sales -->
+      <div class="flash-sales">
+        <div class="section-header">
+          <h2 class="section-title">Today's Specials</h2>
+          <div class="countdown">
+            <span>Ending in:</span>
+            <div class="countdown-box">17</div>:
+            <div class="countdown-box">45</div>:
+            <div class="countdown-box">39</div>
+            <a href="#" class="ms-3 text-primary">See All</a>
+          </div>
+        </div>
+        <div class="product-grid">
+          <!-- Product 1 -->
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="product-image" alt="Burger">
+              <div class="product-badge">-20%</div>
+            </div>
+            <div class="product-info">
+              <div class="product-name">Jumbo Beef Burger with Fries</div>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span>4.5</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="product-price">Ksh 850</div>
+                  <div class="original-price">Ksh 1,050</div>
+                </div>
+                <button class="add-to-cart">Add +</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 2 -->
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="product-image" alt="Pizza">
+              <div class="product-badge">-15%</div>
+            </div>
+            <div class="product-info">
+              <div class="product-name">Family Size Pepperoni Pizza</div>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <span>4.0</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="product-price">Ksh 1,200</div>
+                  <div class="original-price">Ksh 1,400</div>
+                </div>
+                <button class="add-to-cart">Add +</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 3 -->
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="product-image" alt="Dessert">
+              <div class="product-badge">-10%</div>
+            </div>
+            <div class="product-info">
+              <div class="product-name">Chocolate Fudge Cake</div>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>4.9</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="product-price">Ksh 550</div>
+                  <div class="original-price">Ksh 600</div>
+                </div>
+                <button class="add-to-cart">Add +</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 4 -->
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://images.unsplash.com/photo-1530554764233-e79e16c91d08?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="product-image" alt="Salad">
+              <div class="product-badge">New</div>
+            </div>
+            <div class="product-info">
+              <div class="product-name">Healthy Caesar Salad</div>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <i class="far fa-star"></i>
+                <span>3.7</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="product-price">Ksh 650</div>
+                </div>
+                <button class="add-to-cart">Add +</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="flash-sales">
+        <div class="section-header">
+          <h2 class="section-title">Recommended For You</h2>
+          <a href="#" class="text-primary">See All</a>
+        </div>
+        <div class="product-grid">
+          <!-- Repeat similar product cards here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ionicons -->
+  <script type="mod
