@@ -1,21 +1,22 @@
 /* ========= Root Variables ========= */
 :root {
-  --primarycolor: #ff6b00; /* Jumia orange */
-  --secondarycolor: #ffc107;
-  --whitecolor: #fff;
-  --blackcolor: #222;
-  --softcolor: #f5f5f5;
-  --darkgreycolor: #a7a7a7;
-  --greycolor: #f5f5f5;
-  --jumia-bg: #f5f5f5;
+  
+--primarycolor: #0e6253;
 
-  --text-dark: var(--blackcolor);
-  --text-light: var(--darkgreycolor);
-  --bg-light: var(--jumia-bg);
-  --border-color: #e5e7eb;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --secondarycolor: #ffc107;
+
+    --whitecolor: #fff;
+
+    --blackcolor: #222;
+
+    --softgreencolor: #d9f2ee;
+
+    --darkgreycolor: #a7a7a7;
+
+    --greycolor: #f5f5f5;
+
 }
+
 
 /* ========= Reset + Base ========= */
 * {
