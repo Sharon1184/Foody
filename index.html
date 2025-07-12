@@ -14,7 +14,7 @@
 </head>
 <body>
 
-  <!-- 🔼 Top Right Toolbar (Admin Added) -->
+  <!-- 🔼 Top Right Toolbar -->
   <div class="top-toolbar">
     <a href="add-food.html" class="toolbar-icon" title="Admin">
       <ion-icon name="settings-outline"></ion-icon>
@@ -47,19 +47,25 @@
   <!-- 🔹 Categories -->
   <section class="categories">
     <h3>Browse by Category</h3>
-    <div class="category-list">
-      <div class="category-card">🥘 Main Dishes</div>
-      <div class="category-card">🍔 Fast Food</div>
-      <div class="category-card">🍕 Pizza</div>
-      <div class="category-card">🍜 African</div>
+    <div class="category-list" id="category-list">
+      <div class="category-card active" data-category="All">🍽️ All</div>
+      <div class="category-card" data-category="Main Dishes">🥘 Main Dishes</div>
+      <div class="category-card" data-category="Fast Food">🍔 Fast Food</div>
+      <div class="category-card" data-category="Pizza">🍕 Pizza</div>
+      <div class="category-card" data-category="African">🍜 African</div>
     </div>
   </section>
 
   <!-- 🔹 Recommendations -->
   <section class="recommendations">
     <h3>Recommended For You</h3>
-    <div id="recommended-items" class="food-list">
-      <p>No recommended items yet.</p>
+    <div class="carousel-wrapper">
+      <div id="recommended-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+    <div class="view-all-wrapper">
+      <a href="menu.html" class="view-all-btn">View All Foods</a>
     </div>
   </section>
 
@@ -105,9 +111,8 @@
     </div>
   </div>
 
-  <!-- ✅ JavaScript -->
+  <!-- ✅ Cart Modal Script -->
   <script>
-    // Toggle Cart Modal
     const cartModal = document.getElementById('cart-modal');
     const openCartBtn = document.getElementById('open-cart');
     const closeCartBtn = document.getElementById('close-cart');
@@ -121,7 +126,6 @@
       cartModal.style.display = 'none';
     });
 
-    // Close cart when clicking outside content
     window.addEventListener('click', (e) => {
       if (e.target === cartModal) {
         cartModal.style.display = 'none';
@@ -129,5 +133,7 @@
     });
   </script>
 
+  <!-- ✅ App Main Script -->
+  <script type="module" src="main.js"></script>
 </body>
-</html>
+        </html>
