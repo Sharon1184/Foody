@@ -433,4 +433,54 @@ footer p {
     padding: 1rem;
   }
 }
+.food-list,
+.food-carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
 
+.food-card {
+  background: var(--white);
+  padding: 1rem;
+  min-width: 200px;
+  max-width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.food-card:hover {
+  transform: translateY(-5px);
+}
+
+.food-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 130px;
+  object-fit: cover;
+}
+
+.food-card h4 {
+  margin: 0.5rem 0 0.3rem;
+  font-size: 1rem;
+}
+
+.food-card p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--dark);
+}
+
+.food-card button {
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  border: none;
+  color: var(--white);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  }
