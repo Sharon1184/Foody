@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kibandaski Deliveries</title>
+
+  <!-- ✅ Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- ✅ Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 🔼 Top Right Toolbar (Admin Added) -->
+  <div class="top-toolbar">
+    <a href="add-food.html" class="toolbar-icon" title="Admin">
+      <ion-icon name="settings-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon" id="open-cart">
+      <ion-icon name="cart-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon">
+      <ion-icon name="person-outline"></ion-icon>
+    </a>
+  </div>
+
+  <!-- 🔹 Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Delicious Meals Delivered</h2>
+      <p>Order from your favorite restaurants now</p>
+      <button>Order Now</button>
+    </div>
+  </section>
+
+  <!-- 🔍 Search Section -->
+  <section class="search-section">
+    <div class="search-box">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" id="searchInput" placeholder="Search food..." />
+    </div>
+  </section>
+
+  <!-- 🔹 Categories -->
+  <section class="categories">
+    <h3>Browse by Category</h3>
+    <div class="category-list">
+      <div class="category-card">🥘 Main Dishes</div>
+      <div class="category-card">🍔 Fast Food</div>
+      <div class="category-card">🍕 Pizza</div>
+      <div class="category-card">🍜 African</div>
+    </div>
+  </section>
+
+  <!-- 🔹 Recommendations -->
+  <section class="recommendations">
+    <h3>Recommended For You</h3>
+    <div id="recommended-items" class="food-list">
+      <p>No recommended items yet.</p>
+    </div>
+  </section>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <div class="footer-socials">
+      <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+    </div>
+    <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
+  </footer>
+
+  <!-- 🔹 Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <ion-icon name="storefront-outline"></ion-icon>
+      <span>Restaurants</span>
+    </a>
+    <a href="#" class="nav-item">
+      <ion-icon name="pricetags-outline"></ion-icon>
+      <span>Offers</span>
+    </a>
+  </nav>
+
+  <!-- 🛒 Cart Modal -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-modal-content">
+      <span id="close-cart" class="close-cart">&times;</span>
+      <h3>Your Cart</h3>
+      <div id="cart-items" class="cart-items">
+        <p>No items in cart.</p>
+      </div>
+      <div class="cart-footer">
+        <p>Total: <span id="cart-total">KES 0</span></p>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ JavaScript -->
+  <script>
+    // Toggle Cart Modal
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+
+    openCartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      cartModal.style.display = 'flex';
+    });
+
+    closeCartBtn.addEventListener('click', () => {
+      cartModal.style.display = 'none';
+    });
+
+    // Close cart when clicking outside content
+    window.addEventListener('click', (e) => {
+      if (e.target === cartModal) {
+        cartModal.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
