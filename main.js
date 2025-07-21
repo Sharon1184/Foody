@@ -3,11 +3,11 @@ const cartIcon = document.querySelector('.toolbar-icon ion-icon[name="cart-outli
 const cartModal = document.getElementById('cart-modal');
 const closeCart = document.getElementById('close-cart');
 
-cartIcon.parentElement.addEventListener('click', () => {
+cartIcon?.parentElement?.addEventListener('click', () => {
   cartModal.style.display = 'flex';
 });
 
-closeCart.addEventListener('click', () => {
+closeCart?.addEventListener('click', () => {
   cartModal.style.display = 'none';
 });
 
@@ -16,14 +16,13 @@ window.addEventListener('click', (e) => {
     cartModal.style.display = 'none';
   }
 });
+
 // ✅ Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import {
   getFirestore,
   collection,
-  getDocs,
-  query,
-  where
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // ✅ Firebase Config
@@ -40,27 +39,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Elements
+// 🔹 Elements
 const container = document.getElementById("recommended-items");
 const categoryList = document.getElementById("category-list");
 
-// Load and display food
 let allFoods = [];
 
+// 🔹 Load all foods
 async function loadFoods() {
   const foodsRef = collection(db, "foods");
   const snapshot = await getDocs(foodsRef);
+
   allFoods = [];
   snapshot.forEach(doc => {
     allFoods.push({ id: doc.id, ...doc.data() });
   });
+
   displayFoods(allFoods);
   autoScrollCarousel();
 }
 
-// Display filtered foods
+// 🔹 Display foods
 function displayFoods(foods) {
   container.innerHTML = "";
+
   if (foods.length === 0) {
     container.innerHTML = "<p>No items found.</p>";
     return;
@@ -76,28 +78,30 @@ function displayFoods(foods) {
       <button class="add-to-cart-btn">Add to Cart</button>
     `;
 
-    // 🔗 Go to detail page
+    // 🔗 Click whole card to go to details
     card.addEventListener("click", () => {
       window.location.href = `food-detail.html?id=${food.id}`;
     });
 
-    // 🛒 Add to cart button only (prevent event bubbling)
+    // 🛒 Prevent button click from bubbling
     const btn = card.querySelector(".add-to-cart-btn");
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      addToCart(food); // This function you’ll define below
+      addToCart(food); // Implement this function in future
     });
 
     container.appendChild(card);
   });
 }
-// Filter by category
-categoryList.addEventListener("click", (e) => {
-  if (e.target.classList.contains("category-card")) {
-    document.querySelectorAll(".category-card").forEach(el => el.classList.remove("active"));
-    e.target.classList.add("active");
 
-    const category = e.target.dataset.category;
+// 🔹 Filter by category
+categoryList?.addEventListener("click", (e) => {
+  const card = e.target.closest(".category-card");
+  if (card) {
+    document.querySelectorAll(".category-card").forEach(el => el.classList.remove("active"));
+    card.classList.add("active");
+
+    const category = card.dataset.category;
     if (category === "All") {
       displayFoods(allFoods);
     } else {
@@ -107,7 +111,7 @@ categoryList.addEventListener("click", (e) => {
   }
 });
 
-// Infinite scroll carousel
+// 🔹 Auto-scroll carousel
 function autoScrollCarousel() {
   const carousel = document.querySelector(".food-carousel");
   if (!carousel) return;
@@ -124,5 +128,5 @@ function autoScrollCarousel() {
   }, 5000);
 }
 
-// Start
+// 🔹 Start app
 loadFoods();
