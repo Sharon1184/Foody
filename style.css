@@ -421,3 +421,68 @@ footer p {
     padding: 1rem;
   }
   }
+/* Cathy Rider Animation */
+.cathy-delivery {
+  margin: 3rem auto;
+  max-width: 600px;
+  padding: 1.5rem;
+  background-color: #fffaf2;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #ff6b00;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.rider-container {
+  position: relative;
+  height: 220px;
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px dashed #ffd3a3;
+}
+
+.bike-rider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  animation: rideIn 4s ease-out forwards;
+}
+
+.wave-hand {
+  position: absolute;
+  bottom: 140px;
+  left: 50%;
+  font-size: 2rem;
+  transform: translateX(-50%);
+  animation: wave 2s infinite;
+  transform-origin: bottom center;
+}
+
+.delivery-text {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #ff6b00;
+  font-weight: 500;
+}
+
+@keyframes rideIn {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(50%); }
+  100% { transform: translateX(50%); }
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+  75% { transform: rotate(10deg); }
+}
