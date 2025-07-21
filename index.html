@@ -45,35 +45,40 @@
   </section>
 
   <!-- 🔹 Categories -->
-<section class="categories">
-  <h3>Browse by Category</h3>
-  <div class="category-carousel">
-    <div class="category-card">
-      <ion-icon name="restaurant-outline"></ion-icon>
-      <span>Main Dishes</span>
+  <section class="categories">
+    <h3>Browse by Category</h3>
+    <div class="category-carousel" id="category-list">
+      <div class="category-card active" data-category="All">
+        <ion-icon name="grid-outline"></ion-icon>
+        <span>All</span>
+      </div>
+      <div class="category-card" data-category="Main">
+        <ion-icon name="restaurant-outline"></ion-icon>
+        <span>Main Dishes</span>
+      </div>
+      <div class="category-card" data-category="Fast Food">
+        <ion-icon name="fast-food-outline"></ion-icon>
+        <span>Fast Food</span>
+      </div>
+      <div class="category-card" data-category="Pizza">
+        <ion-icon name="pizza-outline"></ion-icon>
+        <span>Pizza</span>
+      </div>
+      <div class="category-card" data-category="Seafood">
+        <ion-icon name="fish-outline"></ion-icon>
+        <span>Seafood</span>
+      </div>
+      <div class="category-card" data-category="Breakfast">
+        <ion-icon name="cafe-outline"></ion-icon>
+        <span>Breakfast</span>
+      </div>
+      <div class="category-card" data-category="Desserts">
+        <ion-icon name="ice-cream-outline"></ion-icon>
+        <span>Desserts</span>
+      </div>
     </div>
-    <div class="category-card">
-      <ion-icon name="fast-food-outline"></ion-icon>
-      <span>Fast Food</span>
-    </div>
-    <div class="category-card">
-      <ion-icon name="pizza-outline"></ion-icon>
-      <span>Pizza</span>
-    </div>
-    <div class="category-card">
-      <ion-icon name="fish-outline"></ion-icon>
-      <span>Seafood</span>
-    </div>
-    <div class="category-card">
-      <ion-icon name="cafe-outline"></ion-icon>
-      <span>Breakfast</span>
-    </div>
-    <div class="category-card">
-      <ion-icon name="ice-cream-outline"></ion-icon>
-      <span>Desserts</span>
-    </div>
-  </div>
-</section>
+  </section>
+
   <!-- 🔹 Recommendations -->
   <section class="recommendations">
     <h3>Recommended For You</h3>
@@ -154,4 +159,4 @@
   <!-- ✅ App Main Script -->
   <script type="module" src="main.js"></script>
 </body>
-        </html>
+  </html>
