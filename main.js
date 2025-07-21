@@ -73,12 +73,24 @@ function displayFoods(foods) {
       <img src="${food.imageUrl}" alt="${food.name}" />
       <h4>${food.name}</h4>
       <p>KES ${food.price}</p>
-      <button>Add to Cart</button>
+      <button class="add-to-cart-btn">Add to Cart</button>
     `;
+
+    // 🔗 Go to detail page
+    card.addEventListener("click", () => {
+      window.location.href = `food-detail.html?id=${food.id}`;
+    });
+
+    // 🛒 Add to cart button only (prevent event bubbling)
+    const btn = card.querySelector(".add-to-cart-btn");
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addToCart(food); // This function you’ll define below
+    });
+
     container.appendChild(card);
   });
 }
-
 // Filter by category
 categoryList.addEventListener("click", (e) => {
   if (e.target.classList.contains("category-card")) {
