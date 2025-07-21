@@ -421,3 +421,31 @@ footer p {
     padding: 1rem;
   }
   }
+/* ✅ Position Cathy rider behind the hero content */
+.hero {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero .hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.hero .bike-rider {
+  position: absolute;
+  right: 20px;
+  bottom: 0;
+  width: 180px;
+  z-index: 2;
+  opacity: 0.35;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
