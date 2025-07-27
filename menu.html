@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu - Kibandaski Deliveries</title>
+
+  <!-- ✅ Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- ✅ Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 🔼 Top Right Toolbar -->
+  <div class="top-toolbar">
+    <a href="add-food.html" class="toolbar-icon" title="Admin">
+      <ion-icon name="settings-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon" id="open-cart">
+      <ion-icon name="cart-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon">
+      <ion-icon name="person-outline"></ion-icon>
+    </a>
+  </div>
+
+  <!-- 🔍 Search Section -->
+  <section class="search-section" style="margin-top: 5rem;">
+    <div class="search-box">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" id="searchInput" placeholder="Search food..." />
+    </div>
+  </section>
+
+  <!-- 🔹 Menu List -->
+  <section class="recommendations">
+    <h3>All Foods</h3>
+    <div class="carousel-wrapper">
+      <div id="menu-list" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <div class="footer-socials">
+      <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+    </div>
+    <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
+  </footer>
+
+  <!-- 🔹 Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </a>
+    <a href="menu.html" class="nav-item active">
+      <ion-icon name="storefront-outline"></ion-icon>
+      <span>Menu</span>
+    </a>
+    <a href="#" class="nav-item">
+      <ion-icon name="pricetags-outline"></ion-icon>
+      <span>Offers</span>
+    </a>
+  </nav>
+
+  <!-- 🛒 Cart Modal -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-modal-content">
+      <span id="close-cart" class="close-cart">&times;</span>
+      <h3>Your Cart</h3>
+      <div id="cart-items" class="cart-items">
+        <p>No items in cart.</p>
+      </div>
+      <div class="cart-footer">
+        <p>Total: <span id="cart-total">KES 0</span></p>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Cart Modal Script -->
+  <script>
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+
+    openCartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      cartModal.style.display = 'flex';
+    });
+
+    closeCartBtn.addEventListener('click', () => {
+      cartModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === cartModal) {
+        cartModal.style.display = 'none';
+      }
+    });
+  </script>
+
+  <!-- ✅ Menu Data Script -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>
+
