@@ -5,59 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add Food - Kibandaski</title>
 
-  <!-- ✅ Ionicons -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <!-- ✅ Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- 🔝 Top Toolbar -->
   <div class="top-toolbar">
     <a href="index.html" class="toolbar-icon"><ion-icon name="home-outline"></ion-icon></a>
     <a href="#" class="toolbar-icon"><ion-icon name="person-outline"></ion-icon></a>
   </div>
 
-  <!-- 🧾 Add Food Form -->
-  <section class="checkout-container" style="margin-top: 5rem;">
+  <section class="checkout-container" style="padding-top: 7rem; padding-bottom: 5.5rem;">
     <div class="checkout-card">
       <h2>Add New Food</h2>
       <form id="foodForm" class="checkout-form">
-        <label>Food Name</label>
+        <label for="name">Food Name</label>
         <input type="text" id="name" required />
 
-        <label>Price (KES)</label>
+        <label for="price">Price (KES)</label>
         <input type="number" id="price" required />
 
-        <label>Restaurant</label>
+        <label for="restaurant">Restaurant</label>
         <input type="text" id="restaurant" required />
 
-        <label>Description</label>
+        <label for="description">Description</label>
         <textarea id="description" required></textarea>
 
-        <label>Image URL</label>
+        <label for="imageUrl">Image URL</label>
         <input type="text" id="imageUrl" required />
 
         <button type="submit" class="checkout-btn">Add Food</button>
       </form>
+      <div id="form-feedback" style="margin-top: 1rem; text-align: center; font-weight: bold;"></div>
     </div>
   </section>
 
-  <!-- 🔻 Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="index.html" class="nav-item">
       <ion-icon name="home-outline"></ion-icon>
       <span>Home</span>
     </a>
-    <a href="add-food.html" class="nav-item">
+    <a href="add-food.html" class="nav-item active">
       <ion-icon name="add-circle-outline"></ion-icon>
       <span>Add Food</span>
     </a>
+    <a href="#" class="nav-item">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <span>Orders</span>
+    </a>
+    <a href="#" class="nav-item">
+        <ion-icon name="cart-outline"></ion-icon>
+        <span>Cart</span>
+    </a>
   </nav>
 
-  <!-- ✅ Firebase + Script -->
   <script type="module">
     // Firebase Setup
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -77,8 +80,12 @@
 
     // Form Submit Logic
     const form = document.getElementById("foodForm");
+    const feedbackDiv = document.getElementById("form-feedback"); // Get the feedback div
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      feedbackDiv.textContent = ''; // Clear previous messages
+      feedbackDiv.style.color = ''; // Reset color
 
       const name = document.getElementById("name").value.trim();
       const price = parseInt(document.getElementById("price").value.trim());
@@ -86,8 +93,9 @@
       const description = document.getElementById("description").value.trim();
       const imageUrl = document.getElementById("imageUrl").value.trim();
 
-      if (!name || !price || !restaurant || !description || !imageUrl) {
-        alert("Please fill all fields.");
+      if (!name || isNaN(price) || !restaurant || !description || !imageUrl) {
+        feedbackDiv.textContent = "Please fill all fields correctly.";
+        feedbackDiv.style.color = "red";
         return;
       }
 
@@ -97,15 +105,20 @@
           price,
           restaurant,
           description,
-          imageUrl
+          imageUrl,
+          createdAt: new Date(),
+          rating: 0, // Default rating
+          soldCount: 0 // Default sold count
         });
-        alert("✅ Food item added!");
+        feedbackDiv.textContent = "✅ Food item added successfully!";
+        feedbackDiv.style.color = "green";
         form.reset();
       } catch (error) {
         console.error("Error adding food:", error);
-        alert("❌ Failed to add food.");
+        feedbackDiv.textContent = "❌ Failed to add food. " + error.message;
+        feedbackDiv.style.color = "red";
       }
     });
   </script>
 </body>
-</html>
+        </html>
