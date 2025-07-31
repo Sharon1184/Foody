@@ -17,14 +17,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --- Cart Data and Functions (Integrated) ---
+// Initialize cartItems from localStorage, or as an empty array if nothing is stored
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
+// Function to update the cart's visual display (modal content, total, badge)
 function updateCartDisplay() {
-    // UPDATED: Get references to the cart UI elements using their new standardized IDs from index.html
-    const cartItemsContainer = document.getElementById('cartItems'); // Corrected ID
-    const cartTotalSpan = document.getElementById('cartTotal');       // Corrected ID
-    const cartBadge = document.getElementById('cartBadge');
+    // Get references to the cart UI elements using their specific IDs from index.html (these are the hyphenated ones)
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const cartBadge = document.getElementById('cartBadge'); // This ID was introduced later, might not exist in original HTML
 
+    // Exit if cart elements are not found on the current page
     if (!cartItemsContainer || !cartTotalSpan) {
         return;
     }
@@ -59,13 +62,14 @@ function updateCartDisplay() {
 
     cartTotalSpan.textContent = `KES ${total.toFixed(2)}`;
 
-    if (cartBadge) {
+    if (cartBadge) { // This check is important as cartBadge might not always be in older HTML
         cartBadge.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     }
 
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
 
+// Function to add a food item to the cart
 async function addToCart(foodId) {
     const foodDocRef = doc(db, 'foods', foodId);
     const foodDocSnap = await getDoc(foodDocRef);
@@ -88,6 +92,7 @@ async function addToCart(foodId) {
     updateCartDisplay();
 }
 
+// Function to increment or decrement the quantity of an item in the cart
 function updateCartItemQuantity(foodId, action) {
     const itemIndex = cartItems.findIndex(item => item.id === foodId);
 
@@ -172,6 +177,7 @@ function renderRestaurantItems(containerId, restaurants) {
     });
 }
 
+
 // --- Fetch and Display Functions (Internal to main.js, for homepage use) ---
 async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     const foodCollection = collection(db, collectionName);
@@ -239,6 +245,7 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
     }
 }
 
+
 // --- Debounce function to limit how often a function is called (Internal) ---
 function debounce(func, delay) {
     let timeout;
@@ -248,6 +255,7 @@ function debounce(func, delay) {
         timeout = setTimeout(() => func.apply(context, args), delay);
     };
 }
+
 
 // --- Initial Data Loading and Event Listeners (Homepage Specific Logic) ---
 if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
@@ -266,19 +274,21 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
             limit: 10
         });
 
-        // Initialize cart display when homepage loads
+        // Initialize cart display when homepage loads (will use the 'cart-items' and 'cart-total' from HTML)
         updateCartDisplay();
 
-        // UPDATED: Cart modal show/hide for homepage (using new standardized IDs and class)
-        const cartModal = document.getElementById('cartModal');         // Corrected ID
-        const openCartBtn = document.getElementById('openCartBtn');     // Corrected ID
-        const closeCartBtn = document.querySelector('.close-cart-btn'); // Corrected to use class selector
+        // Cart modal show/hide for homepage: This part of the main.js might not fully function
+        // because the primary open/close is handled by the inline script now.
+        // These event listeners below would ideally replace the inline script if active.
+        const cartModal = document.getElementById('cart-modal'); // Still using hyphenated for this main.js
+        const openCartBtn = document.getElementById('open-cart'); // Still using hyphenated for this main.js
+        const closeCartBtn = document.getElementById('close-cart'); // Still using hyphenated for this main.js
 
         if (openCartBtn && cartModal) {
             openCartBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 cartModal.style.display = 'flex';
-                updateCartDisplay();
+                // updateCartDisplay(); // This would update the cart content when opening
             });
         }
 
