@@ -834,3 +834,278 @@ footer p {
     font-size: 0.9rem;
   }
 }
+/* Add to your existing style.css */
+
+/* --- Restaurant Header Section --- */
+.restaurant-header-section {
+    position: relative;
+    width: 100%;
+    /* Ensure padding-top is applied to main content if this section is directly below fixed headers */
+    padding-top: 0; /* No extra padding needed here as body handles it */
+}
+
+.restaurant-banner {
+    width: 100%;
+    height: 200px; /* Fixed height for the banner image */
+    overflow: hidden;
+    position: relative;
+    display: flex; /* To center the image horizontally */
+    justify-content: center;
+    align-items: center;
+}
+
+.restaurant-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(80%); /* Slightly dim the banner for text contrast */
+}
+
+.restaurant-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0)); /* Gradient overlay */
+    color: var(--light-text);
+    padding: 1rem;
+    text-align: center;
+    box-sizing: border-box;
+    padding-top: 3rem; /* Give space for logo to overlap */
+}
+
+.restaurant-logo {
+    position: absolute;
+    top: -50px; /* Adjust to position above the info overlay */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    object-fit: cover;
+    background-color: #fff; /* Fallback for no image */
+}
+
+.restaurant-info-overlay h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.cuisine-tag {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-ratings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-ratings ion-icon {
+    color: gold; /* Star color */
+}
+
+.restaurant-delivery-info {
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.restaurant-delivery-info ion-icon {
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+.dot-separator {
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+/* --- Menu Tabs --- */
+.restaurant-menu-section {
+    padding: 1rem 1rem 5.5rem 1rem; /* Adjust padding-bottom for nav bar */
+}
+
+.menu-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+.menu-tabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+.menu-tab {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    white-space: nowrap; /* Prevent wrapping */
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 0.9rem;
+    color: var(--dark-text);
+}
+
+.menu-tab.active {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border-color: var(--primary-color);
+}
+
+.menu-tab:hover:not(.active) {
+    background-color: var(--border-color);
+}
+
+/* --- Menu Items List (similar to food-carousel-section but vertical) --- */
+.menu-items-list {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 1rem; /* Space between items */
+}
+
+/* Reusing .food-card for menu items, but adjust for vertical stacking */
+.menu-items-list .food-card {
+    flex: 0 0 auto; /* Allow items to take full width */
+    width: 100%;
+    display: flex;
+    flex-direction: row; /* Horizontal layout within the card */
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem; /* Add padding to the card itself */
+}
+
+.menu-items-list .food-card img {
+    width: 80px; /* Smaller image on restaurant menu */
+    height: 80px;
+    border-radius: 8px;
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.menu-items-list .food-info {
+    padding: 0; /* Remove padding from food-info as card has it */
+    flex-grow: 1;
+}
+
+.menu-items-list .food-info h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+    white-space: normal; /* Allow name to wrap */
+}
+
+.menu-items-list .food-desc {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 3; /* More lines for description */
+}
+
+.menu-items-list .food-meta {
+    display: none; /* Hide ratings/restaurant name on individual item in menu */
+}
+
+.menu-items-list .price-add {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: none; /* Remove border if not needed */
+    flex-direction: column; /* Stack price and add button */
+    align-items: flex-end; /* Align to right */
+    gap: 0.5rem;
+}
+
+.menu-items-list .price {
+    font-size: 1.2rem;
+}
+
+/* Responsive adjustments for restaurant page */
+@media (min-width: 768px) {
+    .restaurant-header-section {
+        /* On larger screens, content padding will handle clearance */
+    }
+
+    .restaurant-banner {
+        height: 250px;
+    }
+
+    .restaurant-logo {
+        width: 120px;
+        height: 120px;
+        top: -60px;
+    }
+
+    .restaurant-info-overlay {
+        padding: 1.5rem;
+        padding-top: 4rem;
+    }
+
+    .restaurant-info-overlay h1 {
+        font-size: 2.5rem;
+    }
+
+    .menu-tabs {
+        justify-content: center; /* Center tabs on larger screens */
+        padding: 1rem 0;
+    }
+
+    .restaurant-menu-section {
+        padding: 1rem 2rem 5.5rem 2rem;
+    }
+
+    .menu-items-list .food-card {
+        padding: 1.2rem;
+    }
+
+    .menu-items-list .food-card img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* If top-toolbar and delivery-location become relative on large screens,
+       then the body padding-top handles overall content positioning.
+       The restaurant-header-section itself wouldn't need specific padding-top
+       beyond what the body's flow provides.
+    */
+    .restaurant-banner {
+        height: 300px;
+    }
+    .restaurant-logo {
+        width: 150px;
+        height: 150px;
+        top: -75px;
+    }
+
+    .restaurant-info-overlay {
+        padding: 2rem;
+        padding-top: 5rem;
+    }
+
+    .restaurant-menu-section {
+        padding: 1rem 3rem 5.5rem 3rem; /* More padding */
+    }
+    .menu-items-list .food-card {
+        max-width: 800px; /* Constrain width of menu items */
+        margin: 0 auto; /* Center them */
+    }
+  }
