@@ -16,9 +16,9 @@
     <a href="add-food.html" class="toolbar-icon" title="Admin">
       <ion-icon name="settings-outline"></ion-icon>
     </a>
-    <a href="#" class="toolbar-icon cart-icon-btn" id="openCartBtn">
+    <a href="#" class="toolbar-icon cart-icon-btn" id="open-cart">
       <ion-icon name="cart-outline"></ion-icon>
-      <span class="cart-badge" id="cartBadge">0</span> </a>
+      </a>
     <a href="#" class="toolbar-icon">
       <ion-icon name="person-outline"></ion-icon>
     </a>
@@ -211,22 +211,52 @@
     </a>
   </nav>
 
-  <div id="cartModal" class="cart-modal">
+  <div id="cart-modal" class="cart-modal">
     <div class="cart-content">
       <div class="cart-header">
         <h2>Your Cart</h2>
-        <button class="close-cart-btn">&times;</button> </div>
-      <div id="cartItems" class="cart-items"> <p>No items in cart.</p>
+        <span id="close-cart" class="close-cart">&times;</span>
+      </div>
+      <div id="cart-items" class="cart-items">
+        <p>No items in cart.</p>
       </div>
       <div class="cart-footer">
         <div class="cart-summary">
             <span>Total:</span>
-            <span id="cartTotal">KES 0.00</span> </div>
+            <span id="cart-total">KES 0.00</span>
+        </div>
         <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
       </div>
     </div>
   </div>
 
+  <script>
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+
+    if (openCartBtn && cartModal) {
+      openCartBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        cartModal.style.display = 'flex';
+      });
+    }
+
+    if (closeCartBtn && cartModal) {
+      closeCartBtn.addEventListener('click', () => {
+        cartModal.style.display = 'none';
+      });
+    }
+
+    if (cartModal) {
+      window.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+          cartModal.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
   <script type="module" src="main.js"></script>
 </body>
-        </html>
+                                       </html>
