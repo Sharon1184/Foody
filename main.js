@@ -17,32 +17,27 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --- Cart Data and Functions (Integrated) ---
-// Initialize cartItems from localStorage, or as an empty array if nothing is stored
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-// Function to update the cart's visual display (modal content, total, badge)
 function updateCartDisplay() {
-    // Get references to the cart UI elements using their specific IDs from index.html
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalSpan = document.getElementById('cart-total');
-    const cartBadge = document.getElementById('cartBadge'); // Assuming you added this ID to your badge span
+    // UPDATED: Get references to the cart UI elements using their new standardized IDs from index.html
+    const cartItemsContainer = document.getElementById('cartItems'); // Corrected ID
+    const cartTotalSpan = document.getElementById('cartTotal');       // Corrected ID
+    const cartBadge = document.getElementById('cartBadge');
 
-    // Exit if cart elements are not found on the current page (e.g., add-food.html)
     if (!cartItemsContainer || !cartTotalSpan) {
-        // console.warn('Cart display elements not found on this page.'); // Optional: log if elements are missing
         return;
     }
 
     let total = 0;
-    cartItemsContainer.innerHTML = ''; // Clear existing cart items in the modal
+    cartItemsContainer.innerHTML = '';
 
     if (cartItems.length === 0) {
         cartItemsContainer.innerHTML = '<p>No items in cart.</p>';
     } else {
-        // Loop through each item in the cart and create its HTML representation
         cartItems.forEach(item => {
             const itemTotal = item.price * item.quantity;
-            total += itemTotal; // Accumulate total price
+            total += itemTotal;
             const cartItemHtml = `
                 <div class="cart-item">
                     <img src="${item.imageUrl}" alt="${item.name}">
@@ -58,25 +53,20 @@ function updateCartDisplay() {
                     <span class="item-total-price">KES ${itemTotal.toFixed(2)}</span>
                 </div>
             `;
-            cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHtml); // Add item to the modal
+            cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHtml);
         });
     }
 
-    // Update the total price displayed in the cart modal
     cartTotalSpan.textContent = `KES ${total.toFixed(2)}`;
 
-    // Update the cart badge count in the top toolbar
-    if (cartBadge) { // Check if the badge element exists on the page
+    if (cartBadge) {
         cartBadge.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     }
 
-    // Save the current cart state to localStorage after every update
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
 
-// Function to add a food item to the cart
 async function addToCart(foodId) {
-    // Fetch the complete food item data from Firestore using its ID
     const foodDocRef = doc(db, 'foods', foodId);
     const foodDocSnap = await getDoc(foodDocRef);
 
@@ -85,27 +75,19 @@ async function addToCart(foodId) {
         return;
     }
 
-    // Create a food object with its ID and all data from Firestore
     const foodToAdd = { id: foodDocSnap.id, ...foodDocSnap.data() };
 
-    // Check if the item already exists in the cart
     const existingItemIndex = cartItems.findIndex(item => item.id === foodToAdd.id);
 
     if (existingItemIndex > -1) {
-        // If it exists, just increment its quantity
         cartItems[existingItemIndex].quantity++;
     } else {
-        // If it's a new item, add it to the cart with quantity 1
         cartItems.push({ ...foodToAdd, quantity: 1 });
     }
 
-    updateCartDisplay(); // Update the UI after modifying the cart
-    // Optional: Add a visual cue to the cart button (e.g., a temporary 'active' class)
-    // const openCartBtn = document.getElementById('open-cart'); // Using original ID
-    // if (openCartBtn) { openCartBtn.classList.add('active'); }
+    updateCartDisplay();
 }
 
-// Function to increment or decrement the quantity of an item in the cart
 function updateCartItemQuantity(foodId, action) {
     const itemIndex = cartItems.findIndex(item => item.id === foodId);
 
@@ -114,24 +96,21 @@ function updateCartItemQuantity(foodId, action) {
             cartItems[itemIndex].quantity++;
         } else if (action === 'decrement') {
             cartItems[itemIndex].quantity--;
-            // If quantity drops to 0 or less, remove the item from the cart
             if (cartItems[itemIndex].quantity <= 0) {
                 cartItems.splice(itemIndex, 1);
             }
         }
-        updateCartDisplay(); // Update the UI after modifying the cart
+        updateCartDisplay();
     }
 }
 
 // --- Helper function to render food items ---
-// This function remains the same as it correctly renders food items
 function renderFoodItems(containerId, foods) {
     const container = document.getElementById(containerId);
     if (!container) {
-        // console.warn(`Container with ID "${containerId}" not found for rendering food items.`);
         return;
     }
-    container.innerHTML = ''; // Clear existing content (e.g., "Loading...")
+    container.innerHTML = '';
 
     if (foods.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #888;">No items found.</p>';
@@ -163,14 +142,12 @@ function renderFoodItems(containerId, foods) {
 }
 
 // --- Helper function to render restaurant items ---
-// This function remains the same
 function renderRestaurantItems(containerId, restaurants) {
     const container = document.getElementById(containerId);
     if (!container) {
-        // console.warn(`Container with ID "${containerId}" not found for rendering restaurant items.`);
         return;
     }
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = '';
 
     if (restaurants.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #888;">No restaurants found.</p>';
@@ -178,7 +155,6 @@ function renderRestaurantItems(containerId, restaurants) {
     }
 
     restaurants.forEach(restaurant => {
-        // This link points to restaurant.html, ensure that page is set up to receive 'name'
         const restaurantCard = `
             <a href="restaurant.html?name=${encodeURIComponent(restaurant.name)}" class="food-card">
                 <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
@@ -196,9 +172,7 @@ function renderRestaurantItems(containerId, restaurants) {
     });
 }
 
-
 // --- Fetch and Display Functions (Internal to main.js, for homepage use) ---
-// These functions are not exported as they are specifically for the homepage's dynamic sections
 async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     const foodCollection = collection(db, collectionName);
     let q = query(foodCollection);
@@ -265,7 +239,6 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
     }
 }
 
-
 // --- Debounce function to limit how often a function is called (Internal) ---
 function debounce(func, delay) {
     let timeout;
@@ -276,9 +249,7 @@ function debounce(func, delay) {
     };
 }
 
-
 // --- Initial Data Loading and Event Listeners (Homepage Specific Logic) ---
-// This block only runs if the current page is index.html
 if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
     document.addEventListener('DOMContentLoaded', () => {
         // Fetch and display food/restaurant sections on homepage
@@ -298,16 +269,16 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
         // Initialize cart display when homepage loads
         updateCartDisplay();
 
-        // Cart modal show/hide for homepage (using original IDs)
-        const cartModal = document.getElementById('cart-modal');
-        const openCartBtn = document.getElementById('open-cart');
-        const closeCartBtn = document.getElementById('close-cart');
+        // UPDATED: Cart modal show/hide for homepage (using new standardized IDs and class)
+        const cartModal = document.getElementById('cartModal');         // Corrected ID
+        const openCartBtn = document.getElementById('openCartBtn');     // Corrected ID
+        const closeCartBtn = document.querySelector('.close-cart-btn'); // Corrected to use class selector
 
-        if (openCartBtn && cartModal) { // Ensure elements exist before adding listeners
+        if (openCartBtn && cartModal) {
             openCartBtn.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default to stop page jump
+                e.preventDefault();
                 cartModal.style.display = 'flex';
-                updateCartDisplay(); // Update display immediately when opening
+                updateCartDisplay();
             });
         }
 
@@ -331,7 +302,6 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
                 const button = event.target.closest('.add-btn');
                 const foodId = button.dataset.foodId;
                 await addToCart(foodId);
-                // No alert here, as per previous instructions.
             }
             if (event.target.dataset.action === 'increment' || event.target.dataset.action === 'decrement') {
                 const foodId = event.target.dataset.id;
@@ -387,4 +357,4 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
             }, 300));
         }
     });
-                                       }
+}
