@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kibandaski Deliveries</title>
 
-  <!-- ✅ Ionicons -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <!-- ✅ Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- 🔼 Top Right Toolbar -->
   <div class="top-toolbar">
     <a href="add-food.html" class="toolbar-icon" title="Admin">
       <ion-icon name="settings-outline"></ion-icon>
@@ -27,7 +24,14 @@
     </a>
   </div>
 
-  <!-- 🛵 Hero Section -->
+  <section class="delivery-location">
+    <div class="location-content">
+      <ion-icon name="location-outline"></ion-icon>
+      <span>Delivering to: <strong>Your Current Location</strong></span>
+      <button class="change-location-btn">Change</button>
+    </div>
+  </section>
+
   <section class="hero">
     <div class="hero-content">
       <h2>Delicious Meals Delivered</h2>
@@ -37,7 +41,6 @@
     <img src="Rider.png" alt="Cathy Rider" class="bike-rider" />
   </section>
 
-  <!-- 🔍 Search -->
   <section class="search-section">
     <div class="search-box">
       <ion-icon name="search-outline"></ion-icon>
@@ -45,7 +48,10 @@
     </div>
   </section>
 
-  <!-- 🔹 Categories -->
+  <section class="promo-banner">
+    <img src="https://via.placeholder.com/600x150/FFD700/FFFFFF?text=Get+20%25+Off+Your+First+Order!" alt="Promotional Offer" class="banner-img">
+    </section>
+
   <section class="categories">
     <h3>Browse by Category</h3>
     <div class="category-carousel" id="category-list">
@@ -80,7 +86,6 @@
     </div>
   </section>
 
-  <!-- 🔹 Recommended -->
   <section class="recommendations">
     <h3>Recommended For You</h3>
     <div class="carousel-wrapper">
@@ -93,7 +98,50 @@
     </div>
   </section>
 
-  <!-- 🔥 Most Sold -->
+  <section class="recommendations">
+    <h3>Top Restaurants in Kenya <ion-icon name="restaurant-outline"></ion-icon></h3>
+    <div class="carousel-wrapper">
+      <div id="top-restaurants-items" class="food-carousel">
+        <div class="food-card">
+          <img src="https://via.placeholder.com/150x100?text=Restaurant+A" alt="Restaurant A" class="food-img">
+          <div class="food-info">
+            <h4>Java House</h4>
+            <p class="food-desc">Café & Diner</p>
+            <div class="food-meta">
+              <span><ion-icon name="star"></ion-icon> 4.6</span>
+              <span><ion-icon name="bicycle-outline"></ion-icon> 20 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="food-card">
+          <img src="https://via.placeholder.com/150x100?text=Restaurant+B" alt="Restaurant B" class="food-img">
+          <div class="food-info">
+            <h4>Mama Oliech's</h4>
+            <p class="food-desc">Local Delicacies</p>
+            <div class="food-meta">
+              <span><ion-icon name="star"></ion-icon> 4.5</span>
+              <span><ion-icon name="bicycle-outline"></ion-icon> 25 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="food-card">
+            <img src="https://via.placeholder.com/150x100?text=Restaurant+C" alt="Restaurant C" class="food-img">
+            <div class="food-info">
+              <h4>Pizza Inn</h4>
+              <p class="food-desc">Pizzas & Fast Food</p>
+              <div class="food-meta">
+                <span><ion-icon name="star"></ion-icon> 4.2</span>
+                <span><ion-icon name="bicycle-outline"></ion-icon> 30 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="view-all-wrapper">
+      <a href="restaurants.html" class="view-all-btn">View All Restaurants</a>
+    </div>
+  </section>
+
   <section class="recommendations">
     <h3>Most Sold This Week 🔥</h3>
     <div class="carousel-wrapper">
@@ -103,7 +151,6 @@
     </div>
   </section>
 
-  <!-- 🌟 Top Rated -->
   <section class="recommendations">
     <h3>Top Rated 🌟</h3>
     <div class="carousel-wrapper">
@@ -113,7 +160,6 @@
     </div>
   </section>
 
-  <!-- 🆕 New This Week -->
   <section class="recommendations">
     <h3>New This Week 🆕</h3>
     <div class="carousel-wrapper">
@@ -123,7 +169,6 @@
     </div>
   </section>
 
-  <!-- 💸 Budget Meals -->
   <section class="recommendations">
     <h3>Budget Meals 💸 (KES 100 or less)</h3>
     <div class="carousel-wrapper">
@@ -133,7 +178,15 @@
     </div>
   </section>
 
-  <!-- 🔹 Footer -->
+  <section class="recommendations" id="order-again-section">
+    <h3>Order Again <ion-icon name="sync-outline"></ion-icon></h3>
+    <div class="carousel-wrapper">
+      <div id="order-again-items" class="food-carousel">
+        <p>Login to see your past orders.</p>
+        </div>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-socials">
       <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
@@ -144,7 +197,6 @@
     <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
   </footer>
 
-  <!-- 🔹 Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="#" class="nav-item">
       <ion-icon name="home-outline"></ion-icon>
@@ -160,7 +212,6 @@
     </a>
   </nav>
 
-  <!-- 🛒 Cart Modal -->
   <div id="cart-modal" class="cart-modal">
     <div class="cart-modal-content">
       <span id="close-cart" class="close-cart">&times;</span>
@@ -175,7 +226,6 @@
     </div>
   </div>
 
-  <!-- ✅ Cart Modal Script -->
   <script>
     const cartModal = document.getElementById('cart-modal');
     const openCartBtn = document.getElementById('open-cart');
@@ -197,7 +247,6 @@
     });
   </script>
 
-  <!-- ✅ App Script -->
   <script type="module" src="main.js"></script>
 </body>
-</html>
+          </html>
