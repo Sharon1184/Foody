@@ -13,8 +13,9 @@ const firebaseConfig = {
   appId: "1:891566620460:web:04d7f1e1a9ae6a60cb3ad4"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Initialize Firebase App and Firestore instance once
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 
 // --- Cart Data and Functions (Global & Exported) ---
 // Load cart items from localStorage, or initialize as empty array
@@ -26,7 +27,10 @@ export function updateCartDisplay() {
     const cartTotalSpan = document.getElementById('cartTotal');
     const cartBadge = document.getElementById('cartBadge'); // Get cartBadge here as it might not always be present
 
-    if (!cartItemsContainer || !cartTotalSpan) return; // Exit if cart elements aren't on the page
+    if (!cartItemsContainer || !cartTotalSpan) {
+        // console.warn('Cart display elements not found on this page.');
+        return; // Exit if cart elements aren't on the page
+    }
 
     let total = 0;
     cartItemsContainer.innerHTML = ''; // Clear current display
@@ -56,7 +60,7 @@ export function updateCartDisplay() {
         });
     }
     cartTotalSpan.textContent = `KES ${total.toFixed(2)}`;
-    // Only update badge if it exists on the page (i.e., on index.html and restaurant.html)
+    // Only update badge if it exists on the page (i.e., on index.html and food-details.html)
     if (cartBadge) {
         cartBadge.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     }
@@ -67,7 +71,7 @@ export function updateCartDisplay() {
 // Add item to cart (EXPORTED)
 export async function addToCart(foodId) {
     // Fetch the actual food item from Firestore using its ID
-    const foodDocRef = doc(db, 'foods', foodId);
+    const foodDocRef = doc(db, 'foods', foodId); // Use the exported db
     const foodDocSnap = await getDoc(foodDocRef);
 
     if (!foodDocSnap.exists()) {
@@ -85,10 +89,8 @@ export async function addToCart(foodId) {
         cartItems.push({ ...foodToAdd, quantity: 1 });
     }
     updateCartDisplay();
-    const openCartBtn = document.getElementById('openCartBtn');
-    if (openCartBtn) { // Only if on a page with the cart icon
-        openCartBtn.classList.add('active'); // Optional: Add a visual cue
-    }
+    // No longer trying to add 'active' class to openCartBtn here,
+    // as it's better handled by the page where the button exists.
 }
 
 // Increment/Decrement quantity or remove item (EXPORTED)
@@ -108,8 +110,13 @@ export function updateCartItemQuantity(foodId, action) {
 }
 
 // --- Helper function to render food items (EXPORTED) ---
+// This function remains the same as it correctly renders food items
 export function renderFoodItems(containerId, foods) {
     const container = document.getElementById(containerId);
+    if (!container) {
+        // console.warn(`Container with ID "${containerId}" not found for rendering food items.`);
+        return;
+    }
     container.innerHTML = ''; // Clear existing content (e.g., "Loading...")
 
     if (foods.length === 0) {
@@ -142,8 +149,13 @@ export function renderFoodItems(containerId, foods) {
 }
 
 // --- Helper function to render restaurant items (EXPORTED) ---
+// This function remains the same
 export function renderRestaurantItems(containerId, restaurants) {
     const container = document.getElementById(containerId);
+    if (!container) {
+        // console.warn(`Container with ID "${containerId}" not found for rendering restaurant items.`);
+        return;
+    }
     container.innerHTML = ''; // Clear existing content
 
     if (restaurants.length === 0) {
@@ -152,9 +164,9 @@ export function renderRestaurantItems(containerId, restaurants) {
     }
 
     restaurants.forEach(restaurant => {
-        // Make the entire card a link to the restaurant page
         const restaurantCard = `
-            <a href="restaurant.html?name=${encodeURIComponent(restaurant.name)}" class="food-card"> <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
+            <a href="restaurant.html?name=${encodeURIComponent(restaurant.name)}" class="food-card">
+                <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
                 <div class="food-info">
                     <h4>${restaurant.name}</h4>
                     <p class="food-desc">${restaurant.cuisine || 'Various'}</p>
@@ -170,8 +182,8 @@ export function renderRestaurantItems(containerId, restaurants) {
 }
 
 
-// --- Fetch and Display Functions (Internal, not exported) ---
-
+// --- Fetch and Display Functions (Internal to main.js, for homepage use) ---
+// These functions are not exported as they are specifically for the homepage's dynamic sections
 async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     const foodCollection = collection(db, collectionName);
     let q = query(foodCollection);
@@ -192,7 +204,10 @@ async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
         renderFoodItems(containerId, foods);
     } catch (error) {
         console.error(`Error fetching ${containerId}:`, error);
-        document.getElementById(containerId).innerHTML = '<p style="text-align: center; color: red;">Failed to load items.</p>';
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = '<p style="text-align: center; color: red;">Failed to load items.</p>';
+        }
     }
 }
 
@@ -206,21 +221,17 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
         const uniqueRestaurants = {};
         allFoods.forEach(food => {
             if (food.restaurant && !uniqueRestaurants[food.restaurant]) {
-                // Dummy data for restaurant specific fields
                 uniqueRestaurants[food.restaurant] = {
                     name: food.restaurant,
-                    cuisine: 'Mixed Cuisine', // Or try to infer from food items
+                    cuisine: 'Mixed Cuisine',
                     imageUrl: `https://via.placeholder.com/150x100?text=${encodeURIComponent(food.restaurant)}`,
-                    avgRating: (Math.random() * 1 + 3.8), // Placeholder rating 3.8-4.8
-                    deliveryTime: Math.floor(Math.random() * 15) + 20, // Placeholder delivery time 20-35 mins
-                    // In a real app, you'd fetch real restaurant data from a 'restaurants' collection
-                    // id: 'uniqueRestaurantIdFromFirestore'
+                    avgRating: (Math.random() * 1 + 3.8),
+                    deliveryTime: Math.floor(Math.random() * 15) + 20
                 };
             }
         });
         const restaurantsArray = Object.values(uniqueRestaurants);
 
-        // Sort if options are provided (e.g., by avgRating)
         if (options.orderByField === 'avgRating') {
             restaurantsArray.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
         }
@@ -232,12 +243,15 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
 
     } catch (error) {
         console.error(`Error fetching restaurants for ${containerId}:`, error);
-        document.getElementById(containerId).innerHTML = '<p style="text-align: center; color: red;">Failed to load restaurants.</p>';
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = '<p style="text-align: center; color: red;">Failed to load restaurants.</p>';
+        }
     }
 }
 
 
-// --- Debounce function to limit how often a function is called ---
+// --- Debounce function to limit how often a function is called (Internal) ---
 function debounce(func, delay) {
     let timeout;
     return function(...args) {
@@ -248,7 +262,7 @@ function debounce(func, delay) {
 }
 
 
-// --- Initial Data Loading and Event Listeners (Homepage Specific) ---
+// --- Initial Data Loading and Event Listeners (Homepage Specific Logic) ---
 // This block only runs if the current page is index.html
 if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -274,8 +288,9 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
         const openCartBtn = document.getElementById('openCartBtn');
         const closeCartBtn = document.querySelector('.close-cart-btn');
 
-        if (openCartBtn && cartModal) { // Ensure elements exist before adding listeners
-            openCartBtn.addEventListener('click', () => {
+        if (openCartBtn && cartModal) {
+            openCartBtn.addEventListener('click', (e) => { // Prevent default to stop page jump
+                e.preventDefault();
                 cartModal.classList.add('show');
             });
             closeCartBtn.addEventListener('click', () => {
@@ -293,7 +308,7 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
             if (event.target.closest('.add-btn')) {
                 const button = event.target.closest('.add-btn');
                 const foodId = button.dataset.foodId;
-                await addToCart(foodId); // Use await here
+                await addToCart(foodId);
             }
             if (event.target.dataset.action === 'increment' || event.target.dataset.action === 'decrement') {
                 const foodId = event.target.dataset.id;
@@ -322,12 +337,16 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
                         );
                     }
                     renderFoodItems('recommended-items', foods);
-                    document.querySelector('#recommended-items').previousElementSibling.textContent = searchTerm ? 'Search Results' : 'Recommended For You';
+                    const recommendedSectionHeader = document.querySelector('#recommended-items').previousElementSibling;
+                    if (recommendedSectionHeader) {
+                         recommendedSectionHeader.textContent = searchTerm ? 'Search Results' : 'Recommended For You';
+                    }
+
 
                     const otherSections = ['most-sold-items', 'top-rated-items', 'new-items', 'budget-items', 'top-restaurants-items']
-                        .map(id => document.getElementById(id)?.parentElement); // Use optional chaining for safety
+                        .map(id => document.getElementById(id)?.parentElement);
                     otherSections.forEach(section => {
-                        if (section) { // Check if section exists
+                        if (section) {
                             if (searchTerm) {
                                 section.style.display = 'none';
                             } else {
@@ -338,9 +357,12 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
 
                 } catch (error) {
                     console.error("Error during search:", error);
-                    document.getElementById('recommended-items').innerHTML = '<p style="text-align: center; color: red;">Search failed.</p>';
+                    const recommendedItemsContainer = document.getElementById('recommended-items');
+                    if (recommendedItemsContainer) {
+                        recommendedItemsContainer.innerHTML = '<p style="text-align: center; color: red;">Search failed.</p>';
+                    }
                 }
             }, 300));
         }
     });
-                                                 }
+}
