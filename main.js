@@ -17,17 +17,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --- Cart Data and Functions (Integrated) ---
-// Initialize cartItems from localStorage, or as an empty array if nothing is stored
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-// Function to update the cart's visual display (modal content, total, badge)
 function updateCartDisplay() {
-    // Get references to the cart UI elements using their specific IDs from index.html (these are the hyphenated ones)
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalSpan = document.getElementById('cart-total');
-    const cartBadge = document.getElementById('cartBadge'); // This ID was introduced later, might not exist in original HTML
+    const cartItemsContainer = document.getElementById('cart-items'); // Note: Hyphenated ID
+    const cartTotalSpan = document.getElementById('cart-total');       // Note: Hyphenated ID
+    const cartBadge = document.getElementById('cartBadge');
 
-    // Exit if cart elements are not found on the current page
     if (!cartItemsContainer || !cartTotalSpan) {
         return;
     }
@@ -62,14 +58,13 @@ function updateCartDisplay() {
 
     cartTotalSpan.textContent = `KES ${total.toFixed(2)}`;
 
-    if (cartBadge) { // This check is important as cartBadge might not always be in older HTML
+    if (cartBadge) {
         cartBadge.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     }
 
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
 
-// Function to add a food item to the cart
 async function addToCart(foodId) {
     const foodDocRef = doc(db, 'foods', foodId);
     const foodDocSnap = await getDoc(foodDocRef);
@@ -92,7 +87,6 @@ async function addToCart(foodId) {
     updateCartDisplay();
 }
 
-// Function to increment or decrement the quantity of an item in the cart
 function updateCartItemQuantity(foodId, action) {
     const itemIndex = cartItems.findIndex(item => item.id === foodId);
 
@@ -277,12 +271,11 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
         // Initialize cart display when homepage loads (will use the 'cart-items' and 'cart-total' from HTML)
         updateCartDisplay();
 
-        // Cart modal show/hide for homepage: This part of the main.js might not fully function
-        // because the primary open/close is handled by the inline script now.
-        // These event listeners below would ideally replace the inline script if active.
-        const cartModal = document.getElementById('cart-modal'); // Still using hyphenated for this main.js
-        const openCartBtn = document.getElementById('open-cart'); // Still using hyphenated for this main.js
-        const closeCartBtn = document.getElementById('close-cart'); // Still using hyphenated for this main.js
+        // These cart modal event listeners in main.js will likely be redundant
+        // if the inline script in index.html is also present and handling it.
+        const cartModal = document.getElementById('cart-modal');
+        const openCartBtn = document.getElementById('open-cart');
+        const closeCartBtn = document.getElementById('close-cart');
 
         if (openCartBtn && cartModal) {
             openCartBtn.addEventListener('click', (e) => {
@@ -367,4 +360,4 @@ if (window.location.pathname === '/' || window.location.pathname === '/index.htm
             }, 300));
         }
     });
-}
+                         }
