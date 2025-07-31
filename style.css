@@ -1,10 +1,12 @@
 :root {
-  --primary: #ff6b00;
-  --secondary: #ffc107;
-  --bg: #f9f9f9;
-  --text: #222;
-  --white: #fff;
-  --dark: #333;
+  --primary: #ff6b00; /* Orange */
+  --secondary: #ffc107; /* Amber/Yellow */
+  --bg: #f9f9f9; /* Light Gray Background */
+  --text: #222; /* Dark Text */
+  --white: #fff; /* White */
+  --dark: #333; /* Dark Gray */
+  --shadow-light: 0 1px 5px rgba(0,0,0,0.1);
+  --shadow-medium: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* ===== Reset ===== */
@@ -18,10 +20,12 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll from animations */
   font-family: 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+  -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
 }
 
 body {
@@ -29,11 +33,11 @@ body {
   flex-direction: column;
 }
 
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 6rem; /* makes space for the fixed nav */
+/* Removed .main-container as body now acts as the main container */
+
+/* Space for fixed bottom nav */
+body {
+  padding-bottom: 5.5rem; /* Adjust if bottom nav height changes */
 }
 
 
@@ -43,52 +47,158 @@ body {
   top: 0;
   right: 0;
   display: flex;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 0.8rem; /* Slightly reduced gap */
+  padding: 0.8rem 1rem; /* Reduced padding */
   z-index: 1001;
 }
 .toolbar-icon {
   color: var(--dark);
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Slightly larger icon */
   background: var(--white);
-  padding: 0.4rem 0.6rem;
+  padding: 0.5rem 0.7rem; /* Adjusted padding */
   border-radius: 50%;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-  transition: 0.3s;
+  box-shadow: var(--shadow-light);
+  transition: 0.3s ease; /* Added ease for smoother transition */
+  display: flex; /* For perfect centering of icon */
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* Remove underline for links */
 }
 .toolbar-icon:hover {
   color: var(--primary);
   background: #f1f1f1;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* ===== User Location/Delivery Address ===== */
+.delivery-location {
+  background: var(--white);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-light);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally for smaller screens */
+  gap: 0.5rem;
+  position: sticky; /* Keeps it at the top when scrolling */
+  top: 0; /* Aligns to the top */
+  z-index: 990; /* Below toolbar, above other content */
+}
+
+.location-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.location-content ion-icon {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+.location-content strong {
+  font-weight: 600;
+  color: var(--primary); /* Highlight the location */
+}
+
+.change-location-btn {
+  background: none;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.change-location-btn:hover {
+  background: var(--primary);
+  color: var(--white);
 }
 
 /* ===== Hero Section ===== */
 .hero {
-  background: url('https://via.placeholder.com/1200x400?text=Kibandaski+Deliveries') center/cover no-repeat;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
   color: var(--white);
-  text-align: center;
-  padding: 4rem 2rem;
+  padding: 3rem 1rem 5rem; /* Adjusted padding for rider */
   position: relative;
+  overflow: hidden; /* Keep rider animation within bounds */
+  text-align: center;
+}
+.hero-content {
+  position: relative; /* Ensure content is above rider */
+  z-index: 2;
 }
 .hero-content h2 {
-  font-size: 2.5rem;
+  font-size: 2.2rem; /* Slightly smaller for better fit */
+  margin-bottom: 0.8rem;
 }
 .hero-content p {
-  margin: 1rem 0;
+  font-size: 1rem; /* Slightly smaller */
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
 }
 .hero-content button {
   padding: 0.8rem 1.5rem;
-  background: var(--secondary);
+  background: var(--white); /* White button for contrast */
   border: none;
-  color: var(--dark);
+  color: var(--primary); /* Primary color text */
   cursor: pointer;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 50px; /* More rounded */
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+.hero-content button:hover {
+  background: var(--dark); /* Darker on hover */
+  color: var(--white);
+  transform: translateY(-3px);
+}
+
+/* Hero Rider Animation */
+@keyframes riderPatrol {
+  0% {
+    left: -250px;
+    transform: scaleX(1); /* Facing right */
+  }
+  49% { /* Just before 50% mark */
+    left: calc(100% + 50px); /* Move completely off screen */
+    transform: scaleX(1);
+  }
+  50% {
+    left: calc(100% + 50px); /* Still off screen */
+    transform: scaleX(-1); /* Flip to face left */
+  }
+  99% { /* Just before 100% mark */
+    left: -250px;
+    transform: scaleX(-1); /* Move completely off screen */
+  }
+  100% {
+    left: -250px;
+    transform: scaleX(1); /* Flip back to face right for next cycle */
+  }
+}
+
+.bike-rider {
+  position: absolute;
+  bottom: 0;
+  width: 240px; /* Keep size consistent */
+  opacity: 0.7; /* Slightly more opaque */
+  z-index: 1;
+  animation: riderPatrol 16s linear infinite; /* Increased duration for slower, smoother patrol */
 }
 
 /* ===== Search Section ===== */
 .search-section {
   padding: 1rem;
   text-align: center;
+  margin-top: -30px; /* Pull it slightly over the hero for visual connection */
+  position: relative; /* For z-index to work */
+  z-index: 995; /* Above hero, below location bar */
 }
 .search-box {
   display: flex;
@@ -96,15 +206,15 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: var(--white);
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem; /* Increased padding for better touch target */
   border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-medium); /* Slightly stronger shadow */
   width: 90%;
   max-width: 500px;
   margin: 0 auto;
 }
 .search-box ion-icon {
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Slightly larger icon */
   color: var(--dark);
 }
 .search-box input {
@@ -112,7 +222,30 @@ body {
   outline: none;
   font-size: 1rem;
   flex: 1;
+  padding: 0; /* Remove default input padding */
 }
+.search-box input::placeholder {
+  color: #888;
+}
+
+
+/* ===== Promotional Banner ===== */
+.promo-banner {
+  padding: 1rem;
+  text-align: center;
+}
+
+.banner-img {
+  width: 100%;
+  max-width: 600px; /* Limit max width for desktop */
+  border-radius: 12px; /* Rounded corners for the banner */
+  object-fit: cover;
+  height: 120px; /* Fixed height for consistency */
+  box-shadow: var(--shadow-medium);
+  display: block; /* Remove extra space below img */
+  margin: 0 auto; /* Center the image */
+}
+
 
 /* ===== Categories Section ===== */
 .categories {
@@ -121,6 +254,8 @@ body {
 }
 .categories h3 {
   margin-bottom: 1rem;
+  font-size: 1.4rem; /* Consistent heading size */
+  color: var(--dark);
 }
 .category-carousel {
   display: flex;
@@ -128,13 +263,13 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding-bottom: 0.5rem;
-  align-items: center;
+  scrollbar-width: none; /* For Firefox */
+  padding-bottom: 0.5rem; /* Space for potential scrollbar */
+  align-items: flex-start; /* Align cards to top if heights vary */
 }
 
 .category-carousel::-webkit-scrollbar {
-  display: none;
+  display: none; /* For Chrome, Safari, Edge */
 }
 
 .category-card {
@@ -142,85 +277,188 @@ body {
   background: var(--white);
   padding: 1rem;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-light);
   text-align: center;
-  width: 100px;
+  width: 100px; /* Fixed width */
+  height: 100px; /* Fixed height for consistency */
+  display: flex; /* Flexbox for content centering */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   scroll-snap-align: start;
-  transition: background 0.3s ease, transform 0.3s ease;
-  height: 120px; /* or appropriate value */
-  overflow: hidden;
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+  cursor: pointer;
 }
 
 .category-card ion-icon {
-  font-size: 1.8rem;
+  font-size: 2rem; /* Slightly larger icon */
   color: var(--primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem; /* Reduced margin */
 }
 .category-card span {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Slightly smaller font */
   color: var(--dark);
+  font-weight: 500;
 }
 .category-card:hover {
   background: var(--primary);
   color: var(--white);
+  transform: translateY(-5px); /* Lift on hover */
+  box-shadow: var(--shadow-medium);
 }
 .category-card:hover ion-icon {
   color: var(--white);
 }
+.category-card:hover span {
+  color: var(--white);
+}
+/* Active category card (if implemented) */
+.category-card.active {
+  background: var(--primary);
+  color: var(--white);
+}
+.category-card.active ion-icon {
+  color: var(--white);
+}
+.category-card.active span {
+  color: var(--white);
+}
 
-/* ===== Recommendations ===== */
+
+/* ===== Recommendations (Generic Carousel Styling) ===== */
 .recommendations {
   padding: 2rem 1rem;
 }
 .recommendations h3 {
   margin-bottom: 1rem;
+  font-size: 1.4rem; /* Consistent heading size */
+  color: var(--dark);
+  display: flex; /* For icon alignment */
+  align-items: center;
+  gap: 0.5rem; /* Space between text and icon */
 }
-.food-list,
 .food-carousel {
   display: flex;
   flex-wrap: nowrap;
   gap: 1rem;
   overflow-x: auto;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  scrollbar-width: none; /* For Firefox */
+  padding-bottom: 0.5rem; /* Space for potential scrollbar */
 }
+.food-carousel::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, Edge */
+}
+
 .food-card {
   background: var(--white);
-  padding: 1rem;
-  min-width: 200px;
-  max-width: 200px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  text-align: center;
-  transition: transform 0.3s ease;
+  padding: 0.8rem; /* Reduced padding slightly */
+  min-width: 180px; /* Smaller card size */
+  max-width: 180px; /* Smaller card size */
+  border-radius: 12px; /* More rounded corners */
+  box-shadow: var(--shadow-light); /* Lighter shadow */
+  text-align: left; /* Align text left */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0; /* Prevent shrinking in carousel */
 }
 .food-card:hover {
   transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
 }
 .food-card img {
   width: 100%;
   border-radius: 10px;
-  height: 130px;
+  height: 100px; /* Smaller image height */
   object-fit: cover;
+  margin-bottom: 0.5rem;
 }
 .food-card h4 {
-  margin: 0.5rem 0 0.3rem;
-  font-size: 1rem;
-}
-.food-card p {
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  margin: 0; /* Reset margin */
+  font-size: 0.95rem; /* Smaller font size */
   color: var(--dark);
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis */
 }
-.food-card button {
-  padding: 0.5rem 1rem;
+.food-card .food-desc {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem; /* Smaller description */
+  color: #666; /* Lighter color */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.food-card .food-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem; /* Even smaller meta info */
+  color: #888;
+  margin-top: 0.5rem;
+}
+.food-card .food-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.food-card .food-meta ion-icon {
+  font-size: 0.9rem;
+  color: var(--secondary); /* Star and bike icon color */
+}
+
+/* Added for price/add button if present in food-card */
+.food-card .price-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+.food-card .price {
+  font-weight: bold;
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+.food-card .add-btn {
   background: var(--primary);
-  border: none;
   color: var(--white);
-  border-radius: 5px;
+  border: none;
+  border-radius: 50%; /* Circular button */
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 1.2rem;
+  transition: background 0.2s ease;
 }
+.food-card .add-btn:hover {
+  background: var(--dark);
+}
+
+
+.view-all-wrapper {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.view-all-btn {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-light);
+}
+.view-all-btn:hover {
+  background: var(--dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
 
 /* ===== Footer ===== */
 footer {
@@ -230,22 +468,26 @@ footer {
   padding: 1.5rem 1rem;
   margin-top: auto;
   z-index: 10;
-  margin-bottom: 3.5rem; /* Space for bottom nav */
+  /* Removed margin-bottom here as padding-bottom on body handles it */
 }
 footer .footer-socials {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem; /* Slightly more space */
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
 }
 footer .footer-socials a {
-  margin: 0 0.4rem;
   color: var(--white);
-  font-size: 1.4rem;
-  transition: 0.3s;
+  font-size: 1.6rem; /* Larger icons */
+  transition: 0.3s ease;
 }
 footer .footer-socials a:hover {
   color: var(--secondary);
+  transform: scale(1.1);
 }
 footer p {
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* Slightly smaller */
+  opacity: 0.8;
 }
 
 /* ===== Bottom Navigation ===== */
@@ -255,11 +497,12 @@ footer p {
   left: 0;
   width: 100%;
   background: var(--white);
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #eee; /* Lighter border */
   display: flex;
   justify-content: space-around;
-  padding: 0.3rem 0;
+  padding: 0.5rem 0; /* More vertical padding */
   z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05); /* Subtle shadow on top */
 }
 .bottom-nav .nav-item {
   display: flex;
@@ -267,79 +510,130 @@ footer p {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--dark);
+  color: var(--text); /* Default text color */
   text-decoration: none;
   flex-grow: 1;
+  padding: 0.2rem 0; /* Add padding for better touch area */
+  transition: color 0.2s ease;
 }
 .bottom-nav .nav-item ion-icon {
-  font-size: 1.4rem;
+  font-size: 1.6rem; /* Larger icons */
   margin-bottom: 2px;
 }
 .bottom-nav .nav-item span {
   font-size: 0.7rem;
+  font-weight: 500;
 }
 .bottom-nav .nav-item:hover {
   color: var(--primary);
 }
+.bottom-nav .nav-item.active { /* For active state */
+  color: var(--primary);
+}
+
 
 /* ===== Cart Modal ===== */
 .cart-modal {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
   display: none;
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  backdrop-filter: blur(3px); /* Optional: blur background content */
 }
 .cart-modal-content {
   background: var(--white);
   width: 90%;
-  max-width: 400px;
-  padding: 1rem;
-  border-radius: 12px;
+  max-width: 450px; /* Slightly wider modal */
+  padding: 1.5rem; /* More padding */
+  border-radius: 16px; /* More rounded */
   position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease-out forwards; /* Simple animation */
 }
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .close-cart {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.5rem;
+  top: 15px;
+  right: 18px;
+  font-size: 1.8rem; /* Larger close button */
   cursor: pointer;
   color: #888;
+  transition: color 0.2s ease;
+}
+.close-cart:hover {
+  color: var(--dark);
+}
+.cart-modal-content h3 {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.5rem;
+  color: var(--primary);
 }
 .cart-items {
   margin: 1rem 0;
-  max-height: 200px;
+  max-height: 250px; /* Increased height */
   overflow-y: auto;
   border-bottom: 1px solid #eee;
   padding-right: 0.5rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+.cart-items p {
+  text-align: center;
+  padding: 1rem;
+  color: #888;
 }
 .cart-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem; /* More space */
+  padding-top: 0.5rem;
 }
-#checkout-btn {
+#cart-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+.checkout-btn { /* Re-used from HTML structure */
   background: var(--primary);
-  color: #fff;
-  padding: 0.6rem 1rem;
+  color: var(--white);
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px; /* Slightly more rounded */
   cursor: pointer;
   font-weight: bold;
+  text-decoration: none; /* For link */
+  transition: background 0.2s ease;
+}
+.checkout-btn:hover {
+  background: var(--dark);
 }
 
-/* ===== Checkout Page ===== */
+
+/* ===== Checkout Page (Existing styles, good to keep) ===== */
 .checkout-container {
   max-width: 500px;
   margin: 2rem auto;
   padding: 1.5rem;
   background: var(--white);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-medium);
 }
 .checkout-container h2 {
   text-align: center;
@@ -365,6 +659,7 @@ footer p {
 .order-summary .total {
   font-weight: bold;
   color: var(--primary);
+  font-size: 1.1rem;
 }
 .checkout-form {
   display: flex;
@@ -373,33 +668,37 @@ footer p {
 }
 .checkout-form label {
   font-weight: 500;
+  color: var(--dark);
 }
 .checkout-form input,
 .checkout-form textarea,
 .checkout-form select {
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 0.7rem; /* Increased padding */
+  border-radius: 8px; /* More rounded */
+  border: 1px solid #ddd; /* Lighter border */
   font-size: 1rem;
+  width: 100%; /* Ensure they take full width */
 }
 .checkout-form textarea {
   resize: vertical;
 }
-.checkout-btn {
+.checkout-submit-btn { /* Renamed for clarity vs. .checkout-btn for modal */
   margin-top: 1rem;
   background: var(--primary);
   color: white;
   border: none;
   padding: 0.8rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s ease;
 }
-.checkout-btn:hover {
-  background: #e85d00;
+.checkout-submit-btn:hover {
+  background: var(--dark);
 }
 
-/* ===== Checkout Navbar ===== */
+/* ===== Checkout Navbar (Existing styles, good to keep) ===== */
 .checkout-navbar {
   position: sticky;
   top: 0;
@@ -410,134 +709,128 @@ footer p {
   align-items: center;
   gap: 1rem;
   z-index: 1000;
+  box-shadow: var(--shadow-medium);
 }
 .checkout-navbar .nav-back {
   color: var(--white);
   font-size: 1.5rem;
   text-decoration: none;
+  display: flex; /* For icon centering */
+  align-items: center;
 }
 .checkout-navbar h2 {
   font-size: 1.2rem;
   margin: 0;
+  flex-grow: 1; /* Pushes back button to left */
 }
 
-/* ===== Responsive ===== */
+/* ===== Responsive Design ===== */
 @media (max-width: 768px) {
-  .category-list,
-  .food-list {
-    flex-direction: column;
-    align-items: center;
+  /* No specific column changes for carousels as they already use overflow-x */
+  .delivery-location {
+    justify-content: space-between; /* Better alignment on smaller screens */
+    padding: 0.75rem 0.8rem;
+  }
+  .location-content {
+    font-size: 0.9rem;
+  }
+  .change-location-btn {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    margin-left: 0.3rem;
+  }
+
+  .hero-content h2 {
+    font-size: 1.8rem;
+  }
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+  .bike-rider {
+    width: 200px; /* Slightly smaller rider on mobile */
+  }
+
+  .search-box {
+    width: 95%; /* Wider on smaller screens */
+    padding: 0.6rem 0.8rem;
+  }
+  .search-box input {
+    font-size: 0.9rem;
+  }
+
+  .categories h3,
+  .recommendations h3 {
+    font-size: 1.2rem; /* Smaller headings */
+  }
+
+  .category-card {
+    width: 90px;
+    height: 90px;
+    padding: 0.8rem;
+  }
+  .category-card ion-icon {
+    font-size: 1.6rem;
+  }
+  .category-card span {
+    font-size: 0.75rem;
   }
 
   .food-card {
-    width: 90%;
+    min-width: 160px; /* Even smaller food cards */
+    max-width: 160px;
+    padding: 0.7rem;
   }
-}
-@media (max-width: 600px) {
-  .checkout-container {
+  .food-card img {
+    height: 90px;
+  }
+  .food-card h4 {
+    font-size: 0.9rem;
+  }
+  .food-card .food-desc {
+    font-size: 0.75rem;
+  }
+  .food-card .food-meta {
+    font-size: 0.7rem;
+  }
+
+  .promo-banner .banner-img {
+    height: 100px; /* Shorter banner on mobile */
+  }
+
+  footer {
+    padding: 1.2rem 0.8rem;
+  }
+  footer .footer-socials a {
+    font-size: 1.4rem;
+  }
+  footer p {
+    font-size: 0.75rem;
+  }
+
+  .bottom-nav .nav-item ion-icon {
+    font-size: 1.4rem;
+  }
+  .bottom-nav .nav-item span {
+    font-size: 0.65rem;
+  }
+
+  .cart-modal-content {
+    width: 95%; /* Wider modal on smaller screens */
     padding: 1rem;
   }
+  .cart-modal-content h3 {
+    font-size: 1.3rem;
   }
-/* ✅ Position Cathy rider behind the hero content */
-
-.hero {
-  position: relative;
-  background: linear-gradient(to right, var(--primary), var(--secondary));
-  color: var(--white);
-  padding: 3rem 1rem 5rem;
-  overflow: hidden;
-  text-align: center;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-@keyframes riderPatrol {
-  0% {
-    left: -250px;
-    transform: scaleX(1); /* Facing right */
+  .close-cart {
+    font-size: 1.6rem;
+    top: 10px;
+    right: 12px;
   }
-  50% {
-    left: 100%;
-    transform: scaleX(1); /* Still facing right */
+  #cart-total {
+    font-size: 1.1rem;
   }
-  50.01% {
-    transform: scaleX(-1); /* Flip to face left */
+  .checkout-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
   }
-  100% {
-    left: -250px;
-    transform: scaleX(-1); /* Moving back left */
-  }
-}
-
-.bike-rider {
-  position: absolute;
-  bottom: 0;
-  width: 240px;
-  opacity: 0.8;
-  z-index: 1;
-  animation: riderPatrol 12s linear infinite;
-    }
-/* 🔥 Most Sold This Week Section */
-#most-sold {
-  margin: 2rem 1rem;
-}
-
-#most-sold h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
-}
-
-.most-sold-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-}
-
-.most-sold-card {
-  background: var(--white);
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s;
-}
-
-.most-sold-card:hover {
-  transform: scale(1.02);
-}
-
-.most-sold-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-}
-
-.most-sold-card .info {
-  padding: 0.5rem;
-}
-
-.most-sold-card .info h3 {
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-.most-sold-card .info span {
-  font-size: 0.875rem;
-  color: var(--primary);
-}
-
-/* Optional section spacing */
-.section-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 1rem 0;
-  color: var(--primary);
 }
