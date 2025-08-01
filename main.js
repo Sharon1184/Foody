@@ -1,8 +1,8 @@
 // main.js
 
-// Firebase Setup (same as your add-food.html)
+// Firebase Setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB0AgMRtZZ9OGVGbmvdrpoUcdERXKZNo6s",
@@ -16,10 +16,103 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- Cart Data and Functions ---
+// Initialize cartItems from localStorage, or as an empty array if nothing is stored
+let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+// Function to update the cart's visual display (modal content, total, badge)
+function updateCartDisplay() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const cartBadge = document.getElementById('cartBadge');
+
+    // Exit if cart elements are not found on the current page
+    if (!cartItemsContainer || !cartTotalSpan) {
+        return;
+    }
+
+    let total = 0;
+    cartItemsContainer.innerHTML = '';
+
+    if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<p>No items in cart.</p>';
+    } else {
+        cartItems.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            const cartItemHtml = `
+                <div class="cart-item">
+                    <img src="${item.imageUrl}" alt="${item.name}">
+                    <div class="item-details">
+                        <h5>${item.name}</h5>
+                        <p>KES ${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="item-quantity">
+                        <button data-id="${item.id}" data-action="decrement">-</button>
+                        <span>${item.quantity}</span>
+                        <button data-id="${item.id}" data-action="increment">+</button>
+                    </div>
+                    <span class="item-total-price">KES ${itemTotal.toFixed(2)}</span>
+                </div>
+            `;
+            cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHtml);
+        });
+    }
+
+    cartTotalSpan.textContent = `KES ${total.toFixed(2)}`;
+
+    if (cartBadge) {
+        cartBadge.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
+
+// Function to add a food item to the cart
+async function addToCart(foodId) {
+    const foodDocRef = doc(db, 'foods', foodId);
+    const foodDocSnap = await getDoc(foodDocRef);
+
+    if (!foodDocSnap.exists()) {
+        console.warn('Food item not found in Firestore:', foodId);
+        return;
+    }
+
+    const foodToAdd = { id: foodDocSnap.id, ...foodDocSnap.data() };
+
+    const existingItemIndex = cartItems.findIndex(item => item.id === foodToAdd.id);
+
+    if (existingItemIndex > -1) {
+        cartItems[existingItemIndex].quantity++;
+    } else {
+        cartItems.push({ ...foodToAdd, quantity: 1 });
+    }
+
+    updateCartDisplay();
+}
+
+// Function to increment or decrement the quantity of an item in the cart
+function updateCartItemQuantity(foodId, action) {
+    const itemIndex = cartItems.findIndex(item => item.id === foodId);
+
+    if (itemIndex > -1) {
+        if (action === 'increment') {
+            cartItems[itemIndex].quantity++;
+        } else if (action === 'decrement') {
+            cartItems[itemIndex].quantity--;
+            if (cartItems[itemIndex].quantity <= 0) {
+                cartItems.splice(itemIndex, 1);
+            }
+        }
+        updateCartDisplay();
+    }
+}
+
 // --- Helper function to render food items ---
 function renderFoodItems(containerId, foods) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing content (e.g., "Loading...")
+    if (!container) { return; }
+    container.innerHTML = ''; // Clear existing content
 
     if (foods.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #888;">No items found.</p>';
@@ -53,6 +146,7 @@ function renderFoodItems(containerId, foods) {
 // --- Helper function to render restaurant items ---
 function renderRestaurantItems(containerId, restaurants) {
     const container = document.getElementById(containerId);
+    if (!container) { return; }
     container.innerHTML = ''; // Clear existing content
 
     if (restaurants.length === 0) {
@@ -62,24 +156,23 @@ function renderRestaurantItems(containerId, restaurants) {
 
     restaurants.forEach(restaurant => {
         const restaurantCard = `
-            <div class="food-card"> <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
-                <div class="food-info">
-                    <h4>${restaurant.name}</h4>
-                    <p class="food-desc">${restaurant.cuisine || 'Various'}</p>
-                    <div class="food-meta">
-                        <span><ion-icon name="star"></ion-icon> ${restaurant.avgRating ? restaurant.avgRating.toFixed(1) : 'N/A'}</span>
-                        <span><ion-icon name="bicycle-outline"></ion-icon> ${restaurant.deliveryTime || 'XX'} min</span>
-                    </div>
-                    </div>
+            <div class="food-card">
+              <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
+              <div class="food-info">
+                <h4>${restaurant.name}</h4>
+                <p class="food-desc">${restaurant.cuisine || 'Various'}</p>
+                <div class="food-meta">
+                  <span><ion-icon name="star"></ion-icon> ${restaurant.avgRating ? restaurant.avgRating.toFixed(1) : 'N/A'}</span>
+                  <span><ion-icon name="bicycle-outline"></ion-icon> ${restaurant.deliveryTime || 'XX'} min</span>
+                </div>
+              </div>
             </div>
         `;
         container.insertAdjacentHTML('beforeend', restaurantCard);
     });
 }
 
-
 // --- Fetch and Display Functions ---
-
 async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     const foodCollection = collection(db, collectionName);
     let q = query(foodCollection);
@@ -100,15 +193,14 @@ async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
         renderFoodItems(containerId, foods);
     } catch (error) {
         console.error(`Error fetching ${containerId}:`, error);
-        document.getElementById(containerId).innerHTML = '<p style="text-align: center; color: red;">Failed to load items.</p>';
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = '<p style="text-align: center; color: red;">Failed to load items.</p>';
+        }
     }
 }
 
-// Separate function for restaurants as their data structure might be different
 async function fetchAndDisplayRestaurants(containerId, options = {}) {
-    // Assuming you might have a separate 'restaurants' collection
-    // For now, we'll try to extract unique restaurants from 'foods' collection
-    // or fetch from a dummy list if no 'restaurants' collection exists.
     try {
         const foodCollection = collection(db, 'foods');
         const q = query(foodCollection);
@@ -118,19 +210,17 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
         const uniqueRestaurants = {};
         allFoods.forEach(food => {
             if (food.restaurant && !uniqueRestaurants[food.restaurant]) {
-                // Dummy data for restaurant specific fields
                 uniqueRestaurants[food.restaurant] = {
                     name: food.restaurant,
-                    cuisine: 'Mixed Cuisine', // Or try to infer from food items
+                    cuisine: 'Mixed Cuisine',
                     imageUrl: `https://via.placeholder.com/150x100?text=${encodeURIComponent(food.restaurant)}`,
-                    avgRating: (Math.random() * 1 + 3.8), // Placeholder rating 3.8-4.8
-                    deliveryTime: Math.floor(Math.random() * 15) + 20 // Placeholder delivery time 20-35 mins
+                    avgRating: (Math.random() * 1 + 3.8),
+                    deliveryTime: Math.floor(Math.random() * 15) + 20,
                 };
             }
         });
         const restaurantsArray = Object.values(uniqueRestaurants);
 
-        // Sort if options are provided (e.g., by avgRating)
         if (options.orderByField === 'avgRating') {
             restaurantsArray.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
         }
@@ -142,53 +232,53 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
 
     } catch (error) {
         console.error(`Error fetching restaurants for ${containerId}:`, error);
-        document.getElementById(containerId).innerHTML = '<p style="text-align: center; color: red;">Failed to load restaurants.</p>';
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = '<p style="text-align: center; color: red;">Failed to load restaurants.</p>';
+        }
     }
 }
 
+// --- Debounce function to limit how often a function is called ---
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+    };
+}
 
-// --- Initial Data Loading on Homepage ---
+
+// --- Initial Data Loading and Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Recommended For You (e.g., just fetch some limit of any foods)
     fetchAndDisplayFoods('foods', 'recommended-items', { limit: 10 });
-
-    // Top Restaurants (using a dummy approach for now)
     fetchAndDisplayRestaurants('top-restaurants-items', { orderByField: 'avgRating', limit: 5 });
-
-    // Most Sold This Week (Requires 'soldCount' field in Firestore)
     fetchAndDisplayFoods('foods', 'most-sold-items', { orderByField: 'soldCount', orderDirection: 'desc', limit: 10 });
-
-    // Top Rated (Requires 'rating' field in Firestore)
     fetchAndDisplayFoods('foods', 'top-rated-items', { orderByField: 'rating', orderDirection: 'desc', limit: 10 });
-
-    // New This Week (Requires 'createdAt' field in Firestore)
-    // For "New This Week", you'd typically filter by a recent date range.
-    // For simplicity, here it just orders by creation time.
     fetchAndDisplayFoods('foods', 'new-items', { orderByField: 'createdAt', orderDirection: 'desc', limit: 10 });
-
-    // Budget Meals (Requires 'price' field in Firestore)
     fetchAndDisplayFoods('foods', 'budget-items', {
         whereField: 'price',
         whereOperator: '<=',
         whereValue: 100,
-        orderByField: 'price', // Order by price for budget meals
+        orderByField: 'price',
         limit: 10
     });
 
-    // Order Again (This would be personalized for a logged-in user,
-    // so it's left as a placeholder or handled with user authentication)
-    // Example: fetchAndDisplayFoods('foods', 'order-again-items', { userId: 'currentUserId', orderByField: 'lastOrderedAt', orderDirection: 'desc', limit: 5 });
+    // Initialize cart display when the page loads
+    updateCartDisplay();
 
-    // --- Event Listeners for Add to Cart Buttons ---
-    // You'll need to delegate these events since food cards are added dynamically
-    document.body.addEventListener('click', (event) => {
+    // Event Listeners for Add/Remove/Update Cart Buttons
+    document.body.addEventListener('click', async (event) => {
         if (event.target.closest('.add-btn')) {
             const button = event.target.closest('.add-btn');
             const foodId = button.dataset.foodId;
-            console.log('Add to cart:', foodId);
-            // Here you would add logic to add the item to the cart
-            // For example, update localStorage or a cart state.
-            alert(`Added food with ID: ${foodId} to cart! (This is a placeholder action)`);
+            await addToCart(foodId);
+        }
+        if (event.target.dataset.action === 'increment' || event.target.dataset.action === 'decrement') {
+            const foodId = event.target.dataset.id;
+            const action = event.target.dataset.action;
+            updateCartItemQuantity(foodId, action);
         }
     });
 
@@ -198,16 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', debounce(async (event) => {
             const searchTerm = event.target.value.toLowerCase();
             const foodCollection = collection(db, 'foods');
-            let q = query(foodCollection);
-
-            if (searchTerm) {
-                // Firestore doesn't support direct 'contains' for substring search efficiently.
-                // For simple front-end filtering, you'd fetch all (or a large subset) and filter in JS.
-                // For robust search, consider dedicated search solutions (Algolia, ElasticSearch) or
-                // more complex Firestore queries with startAt/endAt if searching prefixes.
-                // For this example, we'll fetch all and filter in JS.
-                q = query(q, orderBy('name')); // Order by name for filtering in JS
-            }
+            let q = query(foodCollection, orderBy('name'));
 
             try {
                 const querySnapshot = await getDocs(q);
@@ -216,29 +297,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (searchTerm) {
                     foods = foods.filter(food =>
                         food.name.toLowerCase().includes(searchTerm) ||
-                        food.restaurant.toLowerCase().includes(searchTerm) ||
-                        food.description.toLowerCase().includes(searchTerm)
+                        (food.restaurant && food.restaurant.toLowerCase().includes(searchTerm)) ||
+                        (food.description && food.description.toLowerCase().includes(searchTerm))
                     );
                 }
-                // Render search results in a new section or replace one of the existing carousels
-                // For simplicity, let's just render to recommended-items for now.
                 renderFoodItems('recommended-items', foods);
-                document.querySelector('.recommendations h3').textContent = searchTerm ? 'Search Results' : 'Recommended For You';
+                const recommendedSectionHeader = document.querySelector('#recommended-items').previousElementSibling;
+                if (recommendedSectionHeader) {
+                     recommendedSectionHeader.textContent = searchTerm ? 'Search Results' : 'Recommended For You';
+                }
+
+                const otherSections = ['most-sold-items', 'top-rated-items', 'new-items', 'budget-items', 'top-restaurants-items']
+                    .map(id => document.getElementById(id)?.parentElement);
+                otherSections.forEach(section => {
+                    if (section) {
+                        if (searchTerm) {
+                            section.style.display = 'none';
+                        } else {
+                            section.style.display = 'block';
+                        }
+                    }
+                });
 
             } catch (error) {
                 console.error("Error during search:", error);
-                document.getElementById('recommended-items').innerHTML = '<p style="text-align: center; color: red;">Search failed.</p>';
+                const recommendedItemsContainer = document.getElementById('recommended-items');
+                if (recommendedItemsContainer) {
+                    recommendedItemsContainer.innerHTML = '<p style="text-align: center; color: red;">Search failed.</p>';
+                }
             }
-        }, 300)); // Debounce search input to avoid too many Firestore calls
-    }
-
-    // Debounce function to limit how often a function is called
-    function debounce(func, delay) {
-        let timeout;
-        return function(...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), delay);
-        };
+        }, 300));
     }
 });
