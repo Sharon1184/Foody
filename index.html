@@ -225,6 +225,30 @@
       </div>
     </div>
   </div>
+  <div id="food-detail-modal" class="food-detail-modal">
+    <div class="food-detail-content">
+        <span class="close-food-detail" id="close-food-detail">&times;</span>
+        <div class="detail-top-section">
+            <img id="food-detail-img" src="" alt="Food Image">
+        </div>
+        <div class="detail-info-section">
+            <h2 id="food-detail-name"></h2>
+            <p id="food-detail-desc"></p>
+            <p id="food-detail-restaurant">
+                <ion-icon name="restaurant-outline"></ion-icon> <span></span>
+            </p>
+            <p id="food-detail-rating">
+                <ion-icon name="star"></ion-icon> <span></span>
+            </p>
+            <div class="detail-actions">
+                <span id="food-detail-price"></span>
+                <button class="add-btn" id="add-to-cart-detail">
+                    <ion-icon name="add-outline"></ion-icon> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
 
   <script>
     const cartModal = document.getElementById('cart-modal');
