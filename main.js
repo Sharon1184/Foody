@@ -17,16 +17,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --- Cart Data and Functions ---
-// Initialize cartItems from localStorage, or as an empty array if nothing is stored
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-// Function to update the cart's visual display (modal content, total, badge)
 function updateCartDisplay() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalSpan = document.getElementById('cart-total');
     const cartBadge = document.getElementById('cartBadge');
 
-    // Exit if cart elements are not found on the current page
     if (!cartItemsContainer || !cartTotalSpan) {
         return;
     }
@@ -68,7 +65,6 @@ function updateCartDisplay() {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
 
-// Function to add a food item to the cart
 async function addToCart(foodId) {
     const foodDocRef = doc(db, 'foods', foodId);
     const foodDocSnap = await getDoc(foodDocRef);
@@ -84,14 +80,15 @@ async function addToCart(foodId) {
 
     if (existingItemIndex > -1) {
         cartItems[existingItemIndex].quantity++;
+        alert(`Quantity of ${foodToAdd.name} updated to ${cartItems[existingItemIndex].quantity} in cart.`);
     } else {
         cartItems.push({ ...foodToAdd, quantity: 1 });
+        alert(`${foodToAdd.name} added to cart!`);
     }
 
     updateCartDisplay();
 }
 
-// Function to increment or decrement the quantity of an item in the cart
 function updateCartItemQuantity(foodId, action) {
     const itemIndex = cartItems.findIndex(item => item.id === foodId);
 
@@ -112,7 +109,7 @@ function updateCartItemQuantity(foodId, action) {
 function renderFoodItems(containerId, foods) {
     const container = document.getElementById(containerId);
     if (!container) { return; }
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = '';
 
     if (foods.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #888;">No items found.</p>';
@@ -147,7 +144,7 @@ function renderFoodItems(containerId, foods) {
 function renderRestaurantItems(containerId, restaurants) {
     const container = document.getElementById(containerId);
     if (!container) { return; }
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = '';
 
     if (restaurants.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #888;">No restaurants found.</p>';
@@ -177,14 +174,31 @@ async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     const foodCollection = collection(db, collectionName);
     let q = query(foodCollection);
 
+    if (options.whereField && options.whereOperator && options.whereValue !== undefined) {
+        q = query(q, where(options.whereField, options.whereOperator, options.whereValue));
+    }
+    // For randomization, we need to fetch all matching documents first
+    if (options.randomize) {
+      const querySnapshot = await getDocs(q);
+      let foods = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // Shuffle the array of foods
+      for (let i = foods.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [foods[i], foods[j]] = [foods[j], foods[i]];
+      }
+
+      // Then take the requested limit
+      renderFoodItems(containerId, foods.slice(0, options.limit));
+      return;
+    }
+
+    // Standard query for non-random sections
     if (options.orderByField) {
         q = query(q, orderBy(options.orderByField, options.orderDirection || 'asc'));
     }
     if (options.limit) {
         q = query(q, limit(options.limit));
-    }
-    if (options.whereField && options.whereOperator && options.whereValue !== undefined) {
-        q = query(q, where(options.whereField, options.whereOperator, options.whereValue));
     }
 
     try {
@@ -252,23 +266,24 @@ function debounce(func, delay) {
 
 // --- Initial Data Loading and Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAndDisplayFoods('foods', 'recommended-items', { limit: 10 });
-    fetchAndDisplayRestaurants('top-restaurants-items', { orderByField: 'avgRating', limit: 5 });
-    fetchAndDisplayFoods('foods', 'most-sold-items', { orderByField: 'soldCount', orderDirection: 'desc', limit: 10 });
-    fetchAndDisplayFoods('foods', 'top-rated-items', { orderByField: 'rating', orderDirection: 'desc', limit: 10 });
-    fetchAndDisplayFoods('foods', 'new-items', { orderByField: 'createdAt', orderDirection: 'desc', limit: 10 });
+    // These sections will now randomize
+    fetchAndDisplayFoods('foods', 'recommended-items', { limit: 10, randomize: true });
     fetchAndDisplayFoods('foods', 'budget-items', {
         whereField: 'price',
         whereOperator: '<=',
         whereValue: 100,
-        orderByField: 'price',
-        limit: 10
+        limit: 10,
+        randomize: true
     });
 
-    // Initialize cart display when the page loads
+    // These sections will remain ordered as before
+    fetchAndDisplayRestaurants('top-restaurants-items', { orderByField: 'avgRating', limit: 5 });
+    fetchAndDisplayFoods('foods', 'most-sold-items', { orderByField: 'soldCount', orderDirection: 'desc', limit: 10 });
+    fetchAndDisplayFoods('foods', 'top-rated-items', { orderByField: 'rating', orderDirection: 'desc', limit: 10 });
+    fetchAndDisplayFoods('foods', 'new-items', { orderByField: 'createdAt', orderDirection: 'desc', limit: 10 });
+
     updateCartDisplay();
 
-    // Event Listeners for Add/Remove/Update Cart Buttons
     document.body.addEventListener('click', async (event) => {
         if (event.target.closest('.add-btn')) {
             const button = event.target.closest('.add-btn');
@@ -282,7 +297,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Search functionality ---
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', debounce(async (event) => {
