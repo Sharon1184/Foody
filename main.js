@@ -18,6 +18,20 @@ const db = getFirestore(app);
 
 // --- Cart Data and Functions ---
 let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+const cartModal = document.getElementById('cart-modal');
+const openCartBtn = document.getElementById('open-cart');
+const closeCartBtn = document.getElementById('close-cart');
+
+// --- Food Detail Modal Elements ---
+const foodDetailModal = document.getElementById('food-detail-modal');
+const closeFoodDetailBtn = document.getElementById('close-food-detail');
+const detailImg = document.getElementById('food-detail-img');
+const detailName = document.getElementById('food-detail-name');
+const detailDesc = document.getElementById('food-detail-desc');
+const detailRestaurant = document.querySelector('#food-detail-restaurant span');
+const detailRating = document.querySelector('#food-detail-rating span');
+const detailPrice = document.getElementById('food-detail-price');
+const detailAddToCartBtn = document.getElementById('add-to-cart-detail');
 
 function updateCartDisplay() {
     const cartItemsContainer = document.getElementById('cart-items');
@@ -50,6 +64,7 @@ function updateCartDisplay() {
                         <button data-id="${item.id}" data-action="increment">+</button>
                     </div>
                     <span class="item-total-price">KES ${itemTotal.toFixed(2)}</span>
+                    <button class="remove-item-btn" data-id="${item.id}">&times;</button>
                 </div>
             `;
             cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHtml);
@@ -75,7 +90,6 @@ async function addToCart(foodId) {
     }
 
     const foodToAdd = { id: foodDocSnap.id, ...foodDocSnap.data() };
-
     const existingItemIndex = cartItems.findIndex(item => item.id === foodToAdd.id);
 
     if (existingItemIndex > -1) {
@@ -105,6 +119,11 @@ function updateCartItemQuantity(foodId, action) {
     }
 }
 
+function removeFromCart(foodId) {
+    cartItems = cartItems.filter(item => item.id !== foodId);
+    updateCartDisplay();
+}
+
 // --- Helper function to render food items ---
 function renderFoodItems(containerId, foods) {
     const container = document.getElementById(containerId);
@@ -118,7 +137,7 @@ function renderFoodItems(containerId, foods) {
 
     foods.forEach(food => {
         const foodCard = `
-            <div class="food-card">
+            <div class="food-card" data-food-id="${food.id}">
                 <img src="${food.imageUrl}" alt="${food.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150?text=No+Image';" />
                 <div class="food-info">
                     <h4>${food.name}</h4>
@@ -177,23 +196,16 @@ async function fetchAndDisplayFoods(collectionName, containerId, options = {}) {
     if (options.whereField && options.whereOperator && options.whereValue !== undefined) {
         q = query(q, where(options.whereField, options.whereOperator, options.whereValue));
     }
-    // For randomization, we need to fetch all matching documents first
     if (options.randomize) {
       const querySnapshot = await getDocs(q);
       let foods = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // Shuffle the array of foods
       for (let i = foods.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [foods[i], foods[j]] = [foods[j], foods[i]];
       }
-
-      // Then take the requested limit
       renderFoodItems(containerId, foods.slice(0, options.limit));
       return;
     }
-
-    // Standard query for non-random sections
     if (options.orderByField) {
         q = query(q, orderBy(options.orderByField, options.orderDirection || 'asc'));
     }
@@ -253,6 +265,30 @@ async function fetchAndDisplayRestaurants(containerId, options = {}) {
     }
 }
 
+// --- Open Food Detail Modal Function ---
+async function openFoodDetailModal(foodId) {
+    const foodDocRef = doc(db, 'foods', foodId);
+    try {
+        const foodDocSnap = await getDoc(foodDocRef);
+        if (foodDocSnap.exists()) {
+            const food = { id: foodDocSnap.id, ...foodDocSnap.data() };
+            detailImg.src = food.imageUrl;
+            detailName.textContent = food.name;
+            detailDesc.textContent = food.description;
+            detailRestaurant.textContent = food.restaurant;
+            detailRating.textContent = food.rating ? food.rating.toFixed(1) : 'N/A';
+            detailPrice.textContent = `KES ${food.price.toFixed(2)}`;
+            detailAddToCartBtn.dataset.foodId = food.id;
+            foodDetailModal.style.display = 'flex';
+        } else {
+            alert("Food item not found.");
+        }
+    } catch (error) {
+        console.error("Error fetching food details:", error);
+        alert("Failed to load food details.");
+    }
+}
+
 // --- Debounce function to limit how often a function is called ---
 function debounce(func, delay) {
     let timeout;
@@ -266,7 +302,6 @@ function debounce(func, delay) {
 
 // --- Initial Data Loading and Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
-    // These sections will now randomize
     fetchAndDisplayFoods('foods', 'recommended-items', { limit: 10, randomize: true });
     fetchAndDisplayFoods('foods', 'budget-items', {
         whereField: 'price',
@@ -275,8 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
         limit: 10,
         randomize: true
     });
-
-    // These sections will remain ordered as before
     fetchAndDisplayRestaurants('top-restaurants-items', { orderByField: 'avgRating', limit: 5 });
     fetchAndDisplayFoods('foods', 'most-sold-items', { orderByField: 'soldCount', orderDirection: 'desc', limit: 10 });
     fetchAndDisplayFoods('foods', 'top-rated-items', { orderByField: 'rating', orderDirection: 'desc', limit: 10 });
@@ -284,16 +317,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCartDisplay();
 
+    // Cart Modal Event Listeners
+    if (openCartBtn && cartModal && closeCartBtn) {
+        openCartBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            cartModal.style.display = 'flex';
+        });
+        closeCartBtn.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+    }
+    
+    // Food Detail Modal Event Listeners
+    if (foodDetailModal && closeFoodDetailBtn) {
+        closeFoodDetailBtn.addEventListener('click', () => {
+            foodDetailModal.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.style.display = 'none';
+        }
+        if (e.target === foodDetailModal) {
+            foodDetailModal.style.display = 'none';
+        }
+    });
+
     document.body.addEventListener('click', async (event) => {
+        if (event.target.closest('.food-card')) {
+            const card = event.target.closest('.food-card');
+            const foodId = card.dataset.foodId;
+            if (foodId && !event.target.closest('.add-btn')) { // Prevent opening modal when clicking the add button
+                await openFoodDetailModal(foodId);
+            }
+        }
+        
         if (event.target.closest('.add-btn')) {
             const button = event.target.closest('.add-btn');
             const foodId = button.dataset.foodId;
             await addToCart(foodId);
         }
-        if (event.target.dataset.action === 'increment' || event.target.dataset.action === 'decrement') {
-            const foodId = event.target.dataset.id;
-            const action = event.target.dataset.action;
-            updateCartItemQuantity(foodId, action);
+
+        if (event.target.closest('.remove-item-btn')) {
+            const button = event.target.closest('.remove-item-btn');
+            const foodId = button.dataset.id;
+            removeFromCart(foodId);
+        }
+
+        if (event.target.closest('#add-to-cart-detail')) {
+            const button = event.target.closest('#add-to-cart-detail');
+            const foodId = button.dataset.foodId;
+            await addToCart(foodId);
+            foodDetailModal.style.display = 'none'; // Close the detail modal after adding
         }
     });
 
@@ -303,7 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const searchTerm = event.target.value.toLowerCase();
             const foodCollection = collection(db, 'foods');
             let q = query(foodCollection, orderBy('name'));
-
             try {
                 const querySnapshot = await getDocs(q);
                 let foods = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -332,7 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 });
-
             } catch (error) {
                 console.error("Error during search:", error);
                 const recommendedItemsContainer = document.getElementById('recommended-items');
