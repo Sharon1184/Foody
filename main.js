@@ -159,6 +159,29 @@ function renderFoodItems(containerId, foods) {
     });
 }
 
+function getRestaurantIcon(restaurantName) {
+    const name = restaurantName.toLowerCase();
+    const iconMap = {
+        'pizza': 'pizza-outline',
+        'burger': 'fast-food-outline',
+        'sushi': 'fish-outline',
+        'taco': 'nutrition-outline',
+        'cafe': 'cafe-outline',
+        'steak': 'restaurant-outline',
+        'grill': 'restaurant-outline',
+        'kfc': 'fast-food-outline',
+        'chicken': 'fast-food-outline',
+        'mcdonalds': 'fast-food-outline'
+    };
+
+    for (const keyword in iconMap) {
+        if (name.includes(keyword)) {
+            return iconMap[keyword];
+        }
+    }
+    return 'restaurant-outline'; // Default icon
+}
+
 // --- Helper function to render restaurant items ---
 function renderRestaurantItems(containerId, restaurants) {
     const container = document.getElementById(containerId);
@@ -171,18 +194,21 @@ function renderRestaurantItems(containerId, restaurants) {
     }
 
     restaurants.forEach(restaurant => {
+        const iconName = getRestaurantIcon(restaurant.name);
         const restaurantCard = `
-            <div class="food-card">
-              <img src="${restaurant.imageUrl || 'https://via.placeholder.com/150x100?text=Restaurant'}" alt="${restaurant.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150x100?text=Restaurant';" />
+            <a href="restaurant.html?name=${encodeURIComponent(restaurant.name)}" class="food-card">
+              <div class="restaurant-icon-container">
+                <ion-icon name="${iconName}"></ion-icon>
+              </div>
               <div class="food-info">
                 <h4>${restaurant.name}</h4>
-                <p class="food-desc">${restaurant.cuisine || 'Various'}</p>
+                <p class="food-desc">Maseno</p>
                 <div class="food-meta">
                   <span><ion-icon name="star"></ion-icon> ${restaurant.avgRating ? restaurant.avgRating.toFixed(1) : 'N/A'}</span>
                   <span><ion-icon name="bicycle-outline"></ion-icon> ${restaurant.deliveryTime || 'XX'} min</span>
                 </div>
               </div>
-            </div>
+            </a>
         `;
         container.insertAdjacentHTML('beforeend', restaurantCard);
     });
