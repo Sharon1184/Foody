@@ -1,81 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Restaurant Name - Kibandaski Deliveries</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        :root {
+            --primary: #F05454;
+            --dark: #30475E;
+            --secondary: #DDDDDD;
+            --bg: #F5F5F5;
+        }
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            box-sizing: border-box;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+            z-index: 50;
+        }
 
-    <link rel="stylesheet" href="style.css" />
+        .header .back-btn {
+            font-size: 2rem;
+            color: var(--dark);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            line-height: 1;
+        }
+        
+        .header #restaurant-page-title {
+            margin: 0 auto;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .cart-icon {
+            position: absolute;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .main-content {
+            padding: 1rem;
+            margin-top: 60px;
+        }
+
+        .food-list-container {
+            padding: 1rem;
+        }
+
+        .food-list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .food-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .food-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .food-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .food-desc {
+            font-size: 0.9rem;
+            color: #777;
+            margin: 0.5rem 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .food-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+        
+        .food-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .food-meta ion-icon {
+            color: var(--primary);
+        }
+        
+        .price-add {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .add-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .add-btn:hover {
+            background-color: var(--dark);
+        }
+        
+        .add-btn ion-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Modal styling */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .cart-modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .close-cart {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-items {
+            margin-top: 1rem;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 1rem;
+        }
+        .item-details {
+            flex-grow: 1;
+        }
+        .item-details h5 {
+            margin: 0;
+        }
+        .item-details p {
+            margin: 0;
+            color: #777;
+        }
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .item-quantity button {
+            background: #eee;
+            border: none;
+            padding: 0.2rem 0.5rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .cart-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-summary {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .checkout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    
+    <header class="header">
+        <a href="index.html" class="back-btn"><ion-icon name="arrow-back-outline"></ion-icon></a>
+        <h2 id="restaurant-page-title"></h2>
+        <div class="cart-icon" id="open-cart">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+    </header>
 
-    <div class="top-toolbar">
-        <a href="index.html" class="toolbar-icon"><ion-icon name="arrow-back-outline"></ion-icon></a>
-        <a href="#" class="toolbar-icon"><ion-icon name="person-outline"></ion-icon></a>
-    </div>
-
-    <div class="delivery-location">
-        <span>📍 Delivered to **Location Name**</span>
-        <button class="change-location-btn">Change</button>
-    </div>
-
-    <section class="restaurant-header-section">
-        <div class="restaurant-banner">
-            <img id="restaurantBanner" src="https://via.placeholder.com/800x200?text=Restaurant+Banner" alt="Restaurant Banner">
-            <div class="restaurant-info-overlay">
-                <img id="restaurantLogo" class="restaurant-logo" src="https://via.placeholder.com/100?text=Logo" alt="Restaurant Logo">
-                <h1 id="restaurantName">Loading Restaurant...</h1>
-                <p id="restaurantCuisine" class="cuisine-tag">Loading Cuisine...</p>
-                <div class="restaurant-ratings">
-                    <ion-icon name="star"></ion-icon>
-                    <span id="restaurantRating">N/A</span>
-                    <span id="restaurantReviews">(0 reviews)</span>
+    <main class="main-content">
+        <div class="food-list-container">
+            <div id="restaurant-food-items" class="food-list-grid">
                 </div>
-                <p class="restaurant-delivery-info">
-                    <ion-icon name="bicycle-outline"></ion-icon> <span id="restaurantDeliveryTime">--</span> min
-                    <span class="dot-separator"></span>
-                    <ion-icon name="cash-outline"></ion-icon> KES <span id="restaurantDeliveryFee">--</span> delivery fee
-                </p>
-            </div>
         </div>
-    </section>
+    </main>
 
-    <section class="restaurant-menu-section">
-        <div class="menu-tabs">
-            <button class="menu-tab active" data-category="all">All Items</button>
-            </div>
-
-        <div class="menu-items-list" id="restaurantMenu">
-            <p style="text-align: center; color: #888;">Loading menu items...</p>
-        </div>
-    </section>
-
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Your Cart</h2>
-                <button class="close-cart-btn">&times;</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <p>Your cart is empty.</p>
-            </div>
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close-cart" id="close-cart">&times;</span>
+            <h3>Your Cart</h3>
+            <div class="cart-items" id="cart-items">
+                </div>
             <div class="cart-footer">
                 <div class="cart-summary">
                     <span>Total:</span>
-                    <span id="cartTotal">KES 0.00</span>
+                    <span id="cart-total">KES 0.00</span>
                 </div>
-                <button class="checkout-btn">Proceed to Checkout</button>
+                <button class="checkout-btn">Checkout</button>
             </div>
         </div>
     </div>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <ion-icon name="home-outline"></ion-icon>
-            <span>Home</span>
+    <script type="module" src="main.js"></script>
+</body>
+    </html>            <span>Home</span>
         </a>
         <a href="add-food.html" class="nav-item">
             <ion-icon name="add-circle-outline"></ion-icon>
