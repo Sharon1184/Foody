@@ -659,3 +659,127 @@ footer p {
 .checkout-btn:hover {
   background-color: var(--dark);
     }
+/* --- Food Detail Modal Styles --- */
+
+.food-card {
+  cursor: pointer;
+}
+
+.food-detail-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  animation: fadeIn 0.3s ease-in-out;
+  justify-content: center;
+  align-items: center;
+}
+
+.food-detail-content {
+  background-color: white;
+  margin: auto;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out forwards;
+  overflow: hidden;
+}
+
+.close-food-detail {
+  color: #aaa;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-food-detail:hover {
+  color: #333;
+}
+
+.detail-top-section {
+  width: 100%;
+  height: 250px;
+}
+.detail-top-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-info-section {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-info-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.detail-info-section p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-info-section p ion-icon {
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+#food-detail-price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+#add-to-cart-detail {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s ease;
+}
+
+#add-to-cart-detail:hover {
+  background: var(--dark);
+  }
