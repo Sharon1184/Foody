@@ -1,119 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout - Kibandaski</title>
-
-  <!-- ✅ Ionicons -->
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-  <!-- ✅ Custom CSS -->
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="styles.css"> <script type="module" src="checkout.js" defer></script>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Checkout</h1>
+        </header>
 
-  <!-- 🔝 Top Toolbar -->
-  <div class="top-toolbar">
-    <a href="index.html" class="toolbar-icon"><ion-icon name="home-outline"></ion-icon></a>
-    <a href="#" class="toolbar-icon" id="open-cart"><ion-icon name="cart-outline"></ion-icon></a>
-    <a href="#" class="toolbar-icon"><ion-icon name="person-outline"></ion-icon></a>
-  </div>
+        <main class="checkout-content">
+            <section class="order-summary">
+                <h2>Order Summary</h2>
+                <div id="order-items" class="order-items-list">
+                    </div>
+                <div class="order-total">
+                    <h3>Total: <span id="order-total-price">KES 0.00</span></h3>
+                </div>
+            </section>
 
-  <!-- 🧾 Main Wrapper -->
-  <main class="main-container">
-    <!-- Checkout Section -->
-    <section class="checkout-container" style="margin-top: 5rem;">
-      <div class="checkout-card">
-        <!-- Order Summary -->
-        <div class="checkout-section">
-          <h3>Your Order</h3>
-          <ul id="order-items">
-            <li>Ugali & Nyama x1 - <strong>KES 250</strong></li>
-            <li>Chapati & Beans x2 - <strong>KES 300</strong></li>
-          </ul>
-          <p class="checkout-total">Total: <strong>KES 550</strong></p>
-        </div>
-
-        <!-- User Info -->
-        <div class="checkout-section">
-          <h3>Delivery Details</h3>
-          <form class="checkout-form">
-            <label>Full Name</label>
-            <input type="text" placeholder="e.g. John Doe" required />
-
-            <label>Phone Number</label>
-            <input type="tel" placeholder="e.g. 0712 345678" required />
-
-            <label>Delivery Address</label>
-            <textarea placeholder="e.g. House No 10, Milimani" required></textarea>
-
-            <label>Payment Method</label>
-            <select required>
-              <option value="">-- Select Payment --</option>
-              <option value="mpesa">M-Pesa</option>
-              <option value="cash">Cash on Delivery</option>
-            </select>
-
-            <button type="submit" class="checkout-btn">Place Order</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- 🔻 Bottom Navigation -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-      <ion-icon name="home-outline"></ion-icon>
-      <span>Home</span>
-    </a>
-    <a href="menu.html" class="nav-item">
-      <ion-icon name="storefront-outline"></ion-icon>
-      <span>Menu</span>
-    </a>
-    <a href="#" class="nav-item">
-      <ion-icon name="pricetags-outline"></ion-icon>
-      <span>Offers</span>
-    </a>
-  </nav>
-
-  <!-- 🛒 Cart Modal -->
-  <div id="cart-modal" class="cart-modal">
-    <div class="cart-modal-content">
-      <span id="close-cart" class="close-cart">&times;</span>
-      <h3>Your Cart</h3>
-      <div id="cart-items" class="cart-items">
-        <p>No items in cart.</p>
-      </div>
-      <div class="cart-footer">
-        <p>Total: <span id="cart-total">KES 0</span></p>
-        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
-      </div>
+            <section class="shipping-info">
+                <h2>Delivery Information</h2>
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                    
+                    <button type="submit" id="place-order-btn">Place Order</button>
+                </form>
+            </section>
+        </main>
     </div>
-  </div>
-
-  <!-- ✅ Modal Script -->
-  <script>
-    const cartModal = document.getElementById('cart-modal');
-    const openCartBtn = document.getElementById('open-cart');
-    const closeCartBtn = document.getElementById('close-cart');
-
-    openCartBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      cartModal.style.display = 'flex';
-    });
-
-    closeCartBtn?.addEventListener('click', () => {
-      cartModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === cartModal) {
-        cartModal.style.display = 'none';
-      }
-    });
-  </script>
 </body>
 </html>
