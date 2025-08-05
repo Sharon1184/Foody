@@ -3,208 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="styles.css"> <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-    <script type="module" src="combined.js" defer></script>
+    <title>Kibandaski Deliveries - Checkout</title>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" defer></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" defer></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="checkout.css">
+    
+    <script type="module" src="checkout.js" defer></script>
 </head>
 <body>
-    <div class="main-container">
-        <header class="header">
-            <div class="logo">
-                <a href="index.html">MyFoodApp</a>
-            </div>
-            <nav class="main-nav">
-                <a href="index.html" class="nav-item">Home</a>
-                <a href="menu.html" class="nav-item">Menu</a>
-                <a href="#" id="open-cart" class="nav-item cart-btn">
-                    <i class="ri-shopping-cart-line"></i>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </a>
-            </nav>
-        </header>
 
-        <main class="page-content">
-            <h1 class="page-title">Checkout</h1>
-
-            <section class="food-section checkout-summary-section">
-                <div class="section-header-toggle">
-                    <h2 class="section-title">Your Order</h2>
-                    <i class="ri-arrow-up-s-line toggle-icon" id="toggle-order-summary"></i>
-                </div>
-                <div class="collapsible-content" id="order-summary-content">
-                    <div class="food-list" id="order-items">
-                        </div>
-
-                    <div class="promo-code-section">
-                        <label for="promo-code">Have a promo code?</label>
-                        <div class="promo-input-group">
-                            <input type="text" id="promo-code" placeholder="Enter code">
-                            <button id="apply-promo-btn">Apply</button>
-                        </div>
-                    </div>
-
-                    <div class="checkout-summary-box">
-                        <div class="summary-line">
-                            <span>Subtotal:</span>
-                            <span id="subtotal-price">KES 0.00</span>
-                        </div>
-                        <div class="summary-line">
-                            <span>Discount:</span>
-                            <span id="discount-price">KES 0.00</span>
-                        </div>
-                        <div class="summary-line">
-                            <span>Delivery Fee:</span>
-                            <span id="delivery-fee">KES 50.00</span>
-                        </div>
-                        <div class="summary-line total-line">
-                            <h3>Total:</h3>
-                            <h3 id="order-total-price">KES 0.00</h3>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="food-section delivery-options-section">
-                <h2 class="section-title">Delivery Options</h2>
-                <div class="delivery-option-cards horizontal-scroll">
-                    <label class="food-card delivery-option-card">
-                        <input type="radio" name="deliveryOption" value="standard" checked>
-                        <div class="delivery-card-content">
-                            <i class="ri-bike-line"></i>
-                            <p>Standard Delivery</p>
-                            <span>45-60 min</span>
-                        </div>
-                    </label>
-                    <label class="food-card delivery-option-card">
-                        <input type="radio" name="deliveryOption" value="pickup">
-                        <div class="delivery-card-content">
-                            <i class="ri-store-line"></i>
-                            <p>Pickup</p>
-                            <span>Ready in 20 min</span>
-                        </div>
-                    </label>
-                </div>
-            </section>
-
-            <section class="food-section">
-                <h2 class="section-title">Delivery & Contact Info</h2>
-                <form id="checkout-form" class="form-scroll-container">
-                    <div class="recent-addresses">
-                        <h3 class="recent-addresses-title">Recent Addresses</h3>
-                        <ul class="address-list" id="recent-addresses-list">
-                            <li class="address-item" data-address="Maseno University, Main Campus, 40105 Maseno">
-                                <i class="ri-map-pin-line"></i> Maseno University
-                            </li>
-                            <li class="address-item" data-address="Kigali Street, Kisumu">
-                                <i class="ri-map-pin-line"></i> Kigali Street
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" required placeholder="e.g., John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="e.g., +254712345678">
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Delivery Address</label>
-                        <textarea id="address" name="address" rows="3" required placeholder="e.g., Maseno University, Main Campus"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="delivery-time">Schedule Delivery</label>
-                        <select id="delivery-time" name="delivery-time">
-                            <option value="asap" selected>As soon as possible</option>
-                            <option value="12:00">12:00 PM</option>
-                            <option value="12:30">12:30 PM</option>
-                            <option value="13:00">1:00 PM</option>
-                            <option value="13:30">1:30 PM</option>
-                            <option value="14:00">2:00 PM</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="instructions">Special Instructions (optional)</label>
-                        <textarea id="instructions" name="instructions" rows="2" placeholder="e.g., Ring the bell twice"></textarea>
-                    </div>
-                </form>
-            </section>
-
-            <section class="food-section">
-                <h2 class="section-title">How would you like to pay?</h2>
-                <div class="food-list horizontal-scroll payment-options" id="payment-options-list">
-                    <label class="food-card payment-option">
-                        <input type="radio" name="paymentMethod" value="mpesa" checked>
-                        <div class="payment-card-content">
-                            <i class="ri-wallet-3-line"></i>
-                            <p>M-Pesa</p>
-                        </div>
-                    </label>
-                    <label class="food-card payment-option">
-                        <input type="radio" name="paymentMethod" value="cash">
-                        <div class="payment-card-content">
-                            <i class="ri-money-dollar-circle-line"></i>
-                            <p>Cash on Delivery</p>
-                        </div>
-                    </label>
-                    <label class="food-card payment-option">
-                        <input type="radio" name="paymentMethod" value="card">
-                        <div class="payment-card-content">
-                            <i class="ri-credit-card-line"></i>
-                            <p>Credit/Debit Card</p>
-                        </div>
-                    </label>
-                </div>
-            </section>
-
-            <section class="checkout-actions">
-                <button type="submit" form="checkout-form" id="place-order-btn" class="place-order-btn">
-                    Place Order
-                </button>
-                <div class="trust-signals">
-                    <p>Your payment is secure</p>
-                    <img src="https://via.placeholder.com/100x30?text=Secure+Badge" alt="Secure Checkout">
-                    <img src="https://via.placeholder.com/50x30?text=PCI" alt="PCI Compliant">
-                </div>
-            </section>
-        </main>
-        
-        <div id="cart-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Your Cart</h2>
-                    <span class="close-btn" id="close-cart">&times;</span>
-                </div>
-                <div id="cart-items" class="cart-items-container">
-                    </div>
-                <div class="cart-footer">
-                    <h4>Total: <span id="cart-total">KES 0.00</span></h4>
-                    <button class="checkout-btn">Checkout</button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="food-detail-modal" class="modal">
-            <div class="modal-content food-detail-content">
-                <span class="close-btn" id="close-food-detail">&times;</span>
-                <img id="food-detail-img" src="" alt="Food Image" class="food-detail-img">
-                <div class="food-detail-info">
-                    <h2 id="food-detail-name"></h2>
-                    <p id="food-detail-desc"></p>
-                    <div class="food-detail-meta">
-                        <span><ion-icon name="restaurant-outline"></ion-icon> <span id="food-detail-restaurant"></span></span>
-                        <span><ion-icon name="star"></ion-icon> <span id="food-detail-rating"></span></span>
-                    </div>
-                    <p class="food-detail-price" id="food-detail-price"></p>
-                    <div class="modal-actions">
-                        <button id="add-to-cart-detail" class="add-to-cart-btn" data-food-id="">Add to Cart</button>
-                        <button id="buy-now-detail" class="buy-now-btn" data-food-id="">Buy Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div class="top-toolbar">
+        <a href="add-food.html" class="toolbar-icon" title="Admin">
+            <ion-icon name="settings-outline"></ion-icon>
+        </a>
+        <a href="#" class="toolbar-icon" id="open-cart">
+            <ion-icon name="cart-outline"></ion-icon>
+        </a>
+        <a href="#" class="toolbar-icon">
+            <ion-icon name="person-outline"></ion-icon>
+        </a>
     </div>
+
+    <main class="checkout-main-content">
+        <h1 class="page-title">Checkout</h1>
+
+        <section class="checkout-section summary-section">
+            <div class="section-header-toggle">
+                <h2 class="section-title">Your Order</h2>
+                <ion-icon name="chevron-up-outline" class="toggle-icon" id="toggle-order-summary"></ion-icon>
+            </div>
+            <div class="collapsible-content" id="order-summary-content">
+                <div id="order-items" class="order-items-list">
+                    <div class="checkout-item food-card">
+                        <img src="https://via.placeholder.com/60x60?text=Food" alt="Food Item">
+                        <div class="item-details">
+                            <h4>Fried Chicken</h4>
+                            <p>KES 350.00</p>
+                        </div>
+                        <div class="item-quantity-controls">
+                            <button>-</button>
+                            <span>1</span>
+                            <button>+</button>
+                        </div>
+                        <span class="item-total">KES 350.00</span>
+                        <button class="remove-item-btn">&times;</button>
+                    </div>
+                    </div>
+
+                <div class="promo-code-section">
+                    <label for="promo-code">Have a promo code?</label>
+                    <div class="promo-input-group">
+                        <input type="text" id="promo-code" placeholder="Enter code">
+                        <button id="apply-promo-btn" class="apply-btn">Apply</button>
+                    </div>
+                </div>
+
+                <div class="checkout-summary-box">
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal-price">KES 0.00</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Discount:</span>
+                        <span id="discount-price">KES 0.00</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Delivery Fee:</span>
+                        <span id="delivery-fee">KES 50.00</span>
+                    </div>
+                    <div class="summary-line total-line">
+                        <h3>Total:</h3>
+                        <h3 id="order-total-price">KES 0.00</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="checkout-section info-section">
+            <h2 class="section-title">Delivery & Contact Info</h2>
+            <form id="checkout-form" class="checkout-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="e.g., John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="e.g., 0712345678">
+                </div>
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <textarea id="address" name="address" rows="3" required placeholder="e.g., Maseno University, Main Campus"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="instructions">Special Instructions (optional)</label>
+                    <textarea id="instructions" name="instructions" rows="2" placeholder="e.g., Ring the bell twice"></textarea>
+                </div>
+            </form>
+        </section>
+
+        <section class="checkout-section payment-section">
+            <h2 class="section-title">How would you like to pay?</h2>
+            <div class="payment-options-list horizontal-scroll">
+                <label class="payment-option-card food-card">
+                    <input type="radio" name="paymentMethod" value="mpesa" checked>
+                    <div class="payment-card-content">
+                        <ion-icon name="card-outline"></ion-icon>
+                        <p>M-Pesa</p>
+                    </div>
+                </label>
+                <label class="payment-option-card food-card">
+                    <input type="radio" name="paymentMethod" value="cash">
+                    <div class="payment-card-content">
+                        <ion-icon name="cash-outline"></ion-icon>
+                        <p>Cash on Delivery</p>
+                    </div>
+                </label>
+                <label class="payment-option-card food-card">
+                    <input type="radio" name="paymentMethod" value="card">
+                    <div class="payment-card-content">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                        <p>Credit/Debit Card</p>
+                    </div>
+                </label>
+            </div>
+        </section>
+
+        <section class="checkout-actions">
+            <button type="submit" form="checkout-form" id="place-order-btn" class="place-order-btn">
+                Place Order
+            </button>
+            <div class="trust-signals">
+                <p>Your payment is secure</p>
+                <img src="https://via.placeholder.com/100x30?text=Secure+Badge" alt="Secure Checkout">
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-socials">
+            <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+            <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+            <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+            <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+        </div>
+        <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
+    </footer>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <ion-icon name="home-outline"></ion-icon>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <ion-icon name="storefront-outline"></ion-icon>
+            <span>Restaurants</span>
+        </a>
+        <a href="#" class="nav-item">
+            <ion-icon name="pricetags-outline"></ion-icon>
+            <span>Offers</span>
+        </a>
+    </nav>
+    
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span id="close-cart" class="close-cart">&times;</span>
+            <h3>Your Cart</h3>
+            <div id="cart-items" class="cart-items">
+                <p>No items in cart.</p>
+            </div>
+            <div class="cart-footer">
+                <p>Total: <span id="cart-total">KES 0</span></p>
+                <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+    
+    <div id="food-detail-modal" class="food-detail-modal">
+        <div class="food-detail-content">
+            <span class="close-food-detail" id="close-food-detail">&times;</span>
+            <div class="detail-top-section">
+                <img id="food-detail-img" src="" alt="Food Image">
+            </div>
+            <div class="detail-info-section">
+                <h2 id="food-detail-name"></h2>
+                <p id="food-detail-desc"></p>
+                <p id="food-detail-restaurant">
+                    <ion-icon name="restaurant-outline"></ion-icon> <span></span>
+                </p>
+                <p id="food-detail-rating">
+                    <ion-icon name="star"></ion-icon> <span></span>
+                </p>
+                <div class="detail-actions">
+                    <span id="food-detail-price"></span>
+                    <button class="add-btn" id="add-to-cart-detail">
+                        <ion-icon name="add-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
     </html>
