@@ -22,12 +22,16 @@ const CACHE_EXPIRY_MS = 3600000; // 1 hour
 
 // Function to generate the HTML for a single food card
 function createFoodCard(food) {
+    const defaultImage = "https://via.placeholder.com/150/ff6b00/ffffff?text=No+Image";
+    // Using food.imageUrl as per your homepage configuration
+    const imageUrl = food.imageUrl || defaultImage;
+
     return `
         <div class="food-card" data-food-id="${food.id}">
             <button class="favorite-btn">
                 <ion-icon name="heart-outline"></ion-icon>
             </button>
-            <img class="food-img" src="${food.img}" alt="${food.name}">
+            <img class="food-img" src="${imageUrl}" alt="${food.name}">
             <div class="food-info">
                 <h4>${food.name}</h4>
                 <p class="food-desc">${food.desc}</p>
