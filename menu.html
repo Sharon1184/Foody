@@ -507,23 +507,6 @@
   <section class="recommendations">
     <h3>All Foods</h3>
     <div id="menu-list" class="food-grid">
-      <div class="food-card" data-food-id="1">
-        <button class="favorite-btn"><ion-icon name="heart-outline"></ion-icon></button>
-        <img class="food-img" src="https://via.placeholder.com/150" alt="Food Item">
-        <div class="food-info">
-          <h4>Food Item Name</h4>
-          <p class="food-desc">A short description of the food item.</p>
-          <div class="food-meta">
-            <span><ion-icon name="star"></ion-icon> N/A</span>
-            <span><ion-icon name="time"></ion-icon> N/A min</span>
-          </div>
-          <div class="food-actions">
-            <span class="food-price">KES 120.00</span>
-            <button class="buy-now-btn">Buy Now</button>
-            <button class="add-to-cart-btn"><ion-icon name="cart-outline"></ion-icon></button>
-          </div>
-        </div>
-      </div>
       <p>Loading...</p>
     </div>
   </section>
@@ -587,55 +570,81 @@
       }
     });
 
-    // --- New Script for Button Functionality ---
+    // Dummy food data
+    const foods = [
+      { id: 1, name: 'Samosa', desc: 'Crispy Samosa with a spicy filling.', price: 50, rating: 4.5, time: 20, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Samosa' },
+      { id: 2, name: 'Chapati', desc: 'Soft Chapati with a creamy curry.', price: 80, rating: 4.2, time: 25, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Chapati' },
+      { id: 3, name: 'Biryani', desc: 'Delicious Biryani with chicken.', price: 250, rating: 4.8, time: 35, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Biryani' },
+      { id: 4, name: 'Pilau', desc: 'Spiced rice with beef.', price: 200, rating: 4.6, time: 30, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Pilau' },
+      { id: 5, name: 'Ugali', desc: 'Ugali with traditional stew.', price: 150, rating: 4.1, time: 20, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Ugali' },
+      { id: 6, name: 'Chips Mayai', desc: 'Fries and omelette combination.', price: 100, rating: 4.4, time: 15, img: 'https://via.placeholder.com/150/ff6b00/ffffff?text=Chips+Mayai' },
+    ];
+
+    const menuList = document.getElementById('menu-list');
+
+    function createFoodCard(food) {
+        return `
+            <div class="food-card" data-food-id="${food.id}">
+                <button class="favorite-btn" onclick="toggleFavorite(event, ${food.id})">
+                    <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <img class="food-img" src="${food.img}" alt="${food.name}">
+                <div class="food-info">
+                    <h4>${food.name}</h4>
+                    <p class="food-desc">${food.desc}</p>
+                    <div class="food-meta">
+                        <span><ion-icon name="star"></ion-icon> ${food.rating}</span>
+                        <span><ion-icon name="time"></ion-icon> ${food.time} min</span>
+                    </div>
+                    <div class="food-actions">
+                        <span class="food-price">KES ${food.price.toFixed(2)}</span>
+                        <button class="buy-now-btn" onclick="handleBuyNow(event, ${food.id})">Buy Now</button>
+                        <button class="add-to-cart-btn" onclick="handleAddToCart(event, ${food.id})">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderFoodCards() {
+        if (!menuList) return;
+        const foodCardsHTML = foods.map(food => createFoodCard(food)).join('');
+        menuList.innerHTML = foodCardsHTML;
+    }
+
+    // Handlers for the buttons
+    function toggleFavorite(event, foodId) {
+        event.stopPropagation();
+        const button = event.currentTarget;
+        button.classList.toggle('active');
+        const isFavorite = button.classList.contains('active');
+        const icon = button.querySelector('ion-icon');
+        icon.setAttribute('name', isFavorite ? 'heart' : 'heart-outline');
+        console.log(`Favorite status updated for food ID: ${foodId}`);
+        alert(`Favorite status updated for item: ${foodId}`);
+    }
+
+    function handleBuyNow(event, foodId) {
+        event.stopPropagation();
+        console.log(`Buy now clicked for food ID: ${foodId}`);
+        alert(`Redirecting to checkout for item: ${foodId}`);
+        // You would typically redirect to a checkout page here
+        // window.location.href = `checkout.html?item=${foodId}`;
+    }
+
+    function handleAddToCart(event, foodId) {
+        event.stopPropagation();
+        console.log(`Add to cart clicked for food ID: ${foodId}`);
+        alert(`Added item to cart: ${foodId}`);
+        // You would typically add the item to a cart data structure here
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-          // Prevent the card from being clicked when the button is clicked
-          event.stopPropagation();
-          const foodCard = event.target.closest('.food-card');
-          const foodId = foodCard.getAttribute('data-food-id');
-          console.log(`Add to cart clicked for food ID: ${foodId}`);
-          alert(`Added item to cart!`);
-        });
-      });
-
-      document.querySelectorAll('.buy-now-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-          event.stopPropagation();
-          const foodCard = event.target.closest('.food-card');
-          const foodId = foodCard.getAttribute('data-food-id');
-          console.log(`Buy now clicked for food ID: ${foodId}`);
-          alert(`Redirecting to checkout for item: ${foodId}`);
-        });
-      });
-
-      document.querySelectorAll('.favorite-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-          event.stopPropagation();
-          const foodCard = event.target.closest('.food-card');
-          const foodId = foodCard.getAttribute('data-food-id');
-          console.log(`Favorite clicked for food ID: ${foodId}`);
-          
-          // Toggle favorite state
-          button.classList.toggle('active');
-          const isFavorite = button.classList.contains('active');
-          
-          if (isFavorite) {
-            console.log(`Food ID ${foodId} added to favorites`);
-            // You can change the icon to 'heart' or 'heart-sharp' here
-            button.innerHTML = '<ion-icon name="heart"></ion-icon>';
-          } else {
-            console.log(`Food ID ${foodId} removed from favorites`);
-            // Change the icon back to 'heart-outline'
-            button.innerHTML = '<ion-icon name="heart-outline"></ion-icon>';
-          }
-          alert(`Favorite status updated for item: ${foodId}`);
-        });
-      });
+      renderFoodCards();
     });
   </script>
 
-  <script type="module" src="menu.js"></script>
 </body>
   </html>
