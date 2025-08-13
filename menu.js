@@ -23,8 +23,8 @@ const CACHE_EXPIRY_MS = 3600000; // 1 hour
 // Function to generate the HTML for a single food card
 function createFoodCard(food) {
     const defaultImage = "https://via.placeholder.com/150/ff6b00/ffffff?text=No+Image";
-    // Using food.imageUrl as per your homepage configuration
-    const imageUrl = food.imageUrl || defaultImage;
+    // Check for both 'imageUrl' and 'img' fields for robustness
+    const imageUrl = food.imageUrl || food.img || defaultImage;
 
     return `
         <div class="food-card" data-food-id="${food.id}">
@@ -98,40 +98,36 @@ async function renderFoodCards() {
     menuList.innerHTML = '<p>Loading menu...</p>';
     let foodData = [];
 
-    // Try to load from local storage
-    const cachedData = localStorage.getItem(CACHE_KEY);
-    if (cachedData) {
-        const { timestamp, foods } = JSON.parse(cachedData);
-        if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
-            console.log('Using cached data from local storage.');
-            foodData = foods;
-        } else {
-            console.log('Cached data expired. Fetching from Firebase.');
-            localStorage.removeItem(CACHE_KEY); // Clear stale cache
-        }
+    // Force clear the cache to ensure we get fresh data
+    localStorage.removeItem(CACHE_KEY); 
+    console.log('Cleared local storage cache to force a fresh fetch from Firebase.');
+
+    // Fetch from Firebase now that the cache is empty
+    try {
+        const foodCollection = collection(db, "foods");
+        const foodSnapshot = await getDocs(foodCollection);
+        foodData = foodSnapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+        });
+
+        // Save the new, correct data to local storage with a timestamp
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+            timestamp: Date.now(),
+            foods: foodData
+        }));
+        console.log('Fetched data from Firebase and saved to local storage.');
+
+    } catch (error) {
+        console.error("Error fetching food items: ", error);
+        menuList.innerHTML = '<p>Error loading menu. Please try again later.</p>';
+        return;
     }
 
-    // If local storage didn't have valid data, fetch from Firebase
-    if (foodData.length === 0) {
-        try {
-            const foodCollection = collection(db, "foods");
-            const foodSnapshot = await getDocs(foodCollection);
-            foodData = foodSnapshot.docs.map(doc => {
-                return { id: doc.id, ...doc.data() };
-            });
-
-            // Save the new data to local storage with a timestamp
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-                timestamp: Date.now(),
-                foods: foodData
-            }));
-            console.log('Fetched data from Firebase and saved to local storage.');
-
-        } catch (error) {
-            console.error("Error fetching food items: ", error);
-            menuList.innerHTML = '<p>Error loading menu. Please try again later.</p>';
-            return;
-        }
+    // --- RANDOMIZE THE FOOD CARDS HERE ---
+    // This is a simple Fisher-Yates shuffle algorithm
+    for (let i = foodData.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [foodData[i], foodData[j]] = [foodData[j], foodData[i]];
     }
 
     // Render the food cards using the retrieved data
