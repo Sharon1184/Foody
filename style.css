@@ -302,6 +302,13 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+/* Add this new rule for the menu page */
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+}
 .food-carousel {
   display: flex;
   flex-wrap: nowrap;
@@ -783,3 +790,4 @@ footer p {
 #add-to-cart-detail:hover {
   background: var(--dark);
   }
+
