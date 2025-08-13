@@ -1,15 +1,15 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
-// ⚠️ Note: For a production app, you should protect these keys.
 const firebaseConfig = {
-  apiKey: "AIzaSyDEY2Y07Gj1Y1k-l9s8q9b9-c9j9n9z9o9u9",
-  authDomain: "kibandaski-deliveries.firebaseapp.com",
-  projectId: "kibandaski-deliveries",
-  storageBucket: "kibandaski-deliveries.appspot.com",
-  messagingSenderId: "898516091494",
-  appId: "1:898516091494:web:f567812345abcdefgh12345"
+  apiKey: "AIzaSyAHhmbgDA_D13LcnEWgtr5Unu7uihBpGPE",
+  authDomain: "food-ae7ff.firebaseapp.com",
+  projectId: "food-ae7ff",
+  storageBucket: "food-ae7ff.firebasestorage.app",
+  messagingSenderId: "1058214228504",
+  appId: "1:1058214228504:web:f1f059be00c9aeaf7cc96d"
 };
 
 // Initialize Firebase
@@ -18,7 +18,7 @@ const db = getFirestore(app);
 
 const menuList = document.getElementById('menu-list');
 const CACHE_KEY = 'kibandaski_menu_cache';
-const CACHE_EXPIRY_MS = 9900000; // 1 hour
+const CACHE_EXPIRY_MS = 3600000; // 1 hour
 
 // Function to generate the HTML for a single food card
 function createFoodCard(food) {
