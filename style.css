@@ -302,13 +302,81 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
-/* Add this new rule for the menu page */
-.food-grid {
+/* Styles for the Menu Page only */
+.menu-page .food-carousel {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
     padding: 0 1rem;
+    margin-top: 1rem;
 }
+
+/* Redefine the food-card styles for the menu page */
+.menu-page .food-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-page .food-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.menu-page .food-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.menu-page .food-info {
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-page .food-info h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-page .food-desc {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.menu-page .food-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.menu-page .food-meta ion-icon {
+    font-size: 1rem;
+    color: #ffc107;
+}
+
+.menu-page .food-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #FF5722;
+    margin-top: 5px;
+  }
 .food-carousel {
   display: flex;
   flex-wrap: nowrap;
@@ -790,4 +858,5 @@ footer p {
 #add-to-cart-detail:hover {
   background: var(--dark);
   }
+
 
