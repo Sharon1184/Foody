@@ -1,71 +1,144 @@
-// Firebase configuration
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Your web app's Firebase configuration
+// ⚠️ Note: For a production app, you should protect these keys.
 const firebaseConfig = {
-    apiKey: "AIzaSyCV-S3g1v4yxQRaXYvXRUnfIuXzvdSDOjE",
-    authDomain: "food-ae7ff.firebaseapp.com",
-    projectId: "food-ae7ff",
-    storageBucket: "food-ae7ff.appspot.com",
-    messagingSenderId: "133155576693",
-    appId: "1:133155576693:web:2b244c5142e79f5eaf48b2"
+  apiKey: "AIzaSyDEY2Y07Gj1Y1k-l9s8q9b9-c9j9n9z9o9u9",
+  authDomain: "kibandaski-deliveries.firebaseapp.com",
+  projectId: "kibandaski-deliveries",
+  storageBucket: "kibandaski-deliveries.appspot.com",
+  messagingSenderId: "898516091494",
+  appId: "1:898516091494:web:f567812345abcdefgh12345"
 };
 
 // Initialize Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// DOM elements
 const menuList = document.getElementById('menu-list');
+const CACHE_KEY = 'kibandaski_menu_cache';
+const CACHE_EXPIRY_MS = 9900000; // 1 hour
 
-// Function to fetch and display all foods
-async function fetchAndDisplayFoods() {
-    try {
-        const foodCollection = collection(db, 'foods');
-        const foodSnapshot = await getDocs(foodCollection);
+// Function to generate the HTML for a single food card
+function createFoodCard(food) {
+    return `
+        <div class="food-card" data-food-id="${food.id}">
+            <button class="favorite-btn">
+                <ion-icon name="heart-outline"></ion-icon>
+            </button>
+            <img class="food-img" src="${food.img}" alt="${food.name}">
+            <div class="food-info">
+                <h4>${food.name}</h4>
+                <p class="food-desc">${food.desc}</p>
+                <div class="food-meta">
+                    <span><ion-icon name="star"></ion-icon> ${food.rating}</span>
+                    <span><ion-icon name="time"></ion-icon> ${food.time} min</span>
+                </div>
+                <div class="food-actions">
+                    <span class="food-price">KES ${food.price.toFixed(2)}</span>
+                    <button class="buy-now-btn">Buy Now</button>
+                    <button class="add-to-cart-btn">
+                        <ion-icon name="cart-outline"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
-        if (foodSnapshot.empty) {
-            menuList.innerHTML = '<p>No food items found.</p>';
+// Function to attach all event listeners to the food cards
+function attachEventListeners() {
+    // Add to Cart button handler
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const foodCard = event.target.closest('.food-card');
+            const foodId = foodCard.getAttribute('data-food-id');
+            console.log(`Add to cart clicked for food ID: ${foodId}`);
+            alert(`Added item to cart!`);
+        });
+    });
+
+    // Buy Now button handler
+    document.querySelectorAll('.buy-now-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const foodCard = event.target.closest('.food-card');
+            const foodId = foodCard.getAttribute('data-food-id');
+            console.log(`Buy now clicked for food ID: ${foodId}`);
+            alert(`Redirecting to checkout for item: ${foodId}`);
+        });
+    });
+
+    // Favorite button handler
+    document.querySelectorAll('.favorite-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const foodCard = event.target.closest('.food-card');
+            const foodId = foodCard.getAttribute('data-food-id');
+            
+            button.classList.toggle('active');
+            const isFavorite = button.classList.contains('active');
+            const icon = button.querySelector('ion-icon');
+            icon.setAttribute('name', isFavorite ? 'heart' : 'heart-outline');
+            
+            console.log(`Favorite status updated for food ID: ${foodId}`);
+            alert(`Favorite status updated for item: ${foodId}`);
+        });
+    });
+}
+
+// Main function to load and render food cards
+async function renderFoodCards() {
+    menuList.innerHTML = '<p>Loading menu...</p>';
+    let foodData = [];
+
+    // Try to load from local storage
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    if (cachedData) {
+        const { timestamp, foods } = JSON.parse(cachedData);
+        if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
+            console.log('Using cached data from local storage.');
+            foodData = foods;
+        } else {
+            console.log('Cached data expired. Fetching from Firebase.');
+            localStorage.removeItem(CACHE_KEY); // Clear stale cache
+        }
+    }
+
+    // If local storage didn't have valid data, fetch from Firebase
+    if (foodData.length === 0) {
+        try {
+            const foodCollection = collection(db, "foods");
+            const foodSnapshot = await getDocs(foodCollection);
+            foodData = foodSnapshot.docs.map(doc => {
+                return { id: doc.id, ...doc.data() };
+            });
+
+            // Save the new data to local storage with a timestamp
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                timestamp: Date.now(),
+                foods: foodData
+            }));
+            console.log('Fetched data from Firebase and saved to local storage.');
+
+        } catch (error) {
+            console.error("Error fetching food items: ", error);
+            menuList.innerHTML = '<p>Error loading menu. Please try again later.</p>';
             return;
         }
+    }
 
-        menuList.innerHTML = '';
-        foodSnapshot.forEach(doc => {
-            const food = doc.data();
-            const foodId = doc.id;
-            
-            const foodCard = document.createElement('a');
-            foodCard.classList.add('food-card');
-            foodCard.href = `food-details.html?id=${foodId}`;
-            
-            foodCard.innerHTML = `
-                <img src="${food.imageUrl}" alt="${food.name}" class="food-img">
-                <div class="food-info">
-                    <h4>${food.name}</h4>
-                    <p class="food-desc">${food.restaurantName || 'Restaurant'}</p>
-                    <div class="food-meta">
-                        <span><ion-icon name="star"></ion-icon> ${food.rating || 'N/A'}</span>
-                        <span><ion-icon name="bicycle-outline"></ion-icon> ${food.deliveryTime || 'N/A'} min</span>
-                    </div>
-                    <p class="food-price">KES ${food.price.toFixed(2)}</p>
-                </div>
-            `;
-            menuList.appendChild(foodCard);
-        });
-
-    } catch (error) {
-        console.error("Error fetching foods: ", error);
-        menuList.innerHTML = '<p>Error loading food items. Please try again later.</p>';
+    // Render the food cards using the retrieved data
+    if (foodData.length > 0) {
+        const foodCardsHTML = foodData.map(food => createFoodCard(food)).join('');
+        menuList.innerHTML = foodCardsHTML;
+        attachEventListeners();
+    } else {
+        menuList.innerHTML = '<p>No food items found.</p>';
     }
 }
 
-// Function to update cart count (reused from other pages for consistency)
-function updateCartCount() {
-    // Implement your cart count logic here if needed
-}
-
-// Event listener to run on page load
-document.addEventListener('DOMContentLoaded', () => {
-    fetchAndDisplayFoods();
-    updateCartCount();
-});
+// Render food cards when the page loads
+document.addEventListener('DOMContentLoaded', renderFoodCards);
