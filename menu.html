@@ -122,7 +122,6 @@
       padding-left: 1rem;
     }
     
-    /* This is the new grid layout for the menu page */
     .food-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -139,6 +138,7 @@
       flex-direction: column;
       overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative; /* Added for absolute positioning of favorite icon */
     }
     .food-card:hover {
       transform: translateY(-5px);
@@ -185,6 +185,62 @@
       font-weight: bold;
       color: var(--primary);
       margin-top: 5px;
+    }
+
+    /* New styles for buttons */
+    .food-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .buy-now-btn, .add-to-cart-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+    .buy-now-btn {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+    .buy-now-btn:hover {
+      background-color: #e55a00;
+    }
+    .add-to-cart-btn {
+      background-color: var(--secondary);
+      color: var(--dark);
+    }
+    .add-to-cart-btn:hover {
+      background-color: #d1a506;
+    }
+
+    /* Favorite button */
+    .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      color: #ccc;
+      transition: color 0.2s ease, background 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 25px;
+      height: 25px;
+    }
+    .favorite-btn.active {
+      color: #ff3838;
+    }
+    .favorite-btn:hover {
+      color: #ff3838;
+      background: var(--white);
     }
 
     /* ===== Footer ===== */
@@ -451,6 +507,23 @@
   <section class="recommendations">
     <h3>All Foods</h3>
     <div id="menu-list" class="food-grid">
+      <div class="food-card" data-food-id="1">
+        <button class="favorite-btn"><ion-icon name="heart-outline"></ion-icon></button>
+        <img class="food-img" src="https://via.placeholder.com/150" alt="Food Item">
+        <div class="food-info">
+          <h4>Food Item Name</h4>
+          <p class="food-desc">A short description of the food item.</p>
+          <div class="food-meta">
+            <span><ion-icon name="star"></ion-icon> N/A</span>
+            <span><ion-icon name="time"></ion-icon> N/A min</span>
+          </div>
+          <div class="food-actions">
+            <span class="food-price">KES 120.00</span>
+            <button class="buy-now-btn">Buy Now</button>
+            <button class="add-to-cart-btn"><ion-icon name="cart-outline"></ion-icon></button>
+          </div>
+        </div>
+      </div>
       <p>Loading...</p>
     </div>
   </section>
@@ -512,6 +585,54 @@
       if (e.target === cartModal) {
         cartModal.style.display = 'none';
       }
+    });
+
+    // --- New Script for Button Functionality ---
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+          // Prevent the card from being clicked when the button is clicked
+          event.stopPropagation();
+          const foodCard = event.target.closest('.food-card');
+          const foodId = foodCard.getAttribute('data-food-id');
+          console.log(`Add to cart clicked for food ID: ${foodId}`);
+          alert(`Added item to cart!`);
+        });
+      });
+
+      document.querySelectorAll('.buy-now-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const foodCard = event.target.closest('.food-card');
+          const foodId = foodCard.getAttribute('data-food-id');
+          console.log(`Buy now clicked for food ID: ${foodId}`);
+          alert(`Redirecting to checkout for item: ${foodId}`);
+        });
+      });
+
+      document.querySelectorAll('.favorite-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const foodCard = event.target.closest('.food-card');
+          const foodId = foodCard.getAttribute('data-food-id');
+          console.log(`Favorite clicked for food ID: ${foodId}`);
+          
+          // Toggle favorite state
+          button.classList.toggle('active');
+          const isFavorite = button.classList.contains('active');
+          
+          if (isFavorite) {
+            console.log(`Food ID ${foodId} added to favorites`);
+            // You can change the icon to 'heart' or 'heart-sharp' here
+            button.innerHTML = '<ion-icon name="heart"></ion-icon>';
+          } else {
+            console.log(`Food ID ${foodId} removed from favorites`);
+            // Change the icon back to 'heart-outline'
+            button.innerHTML = '<ion-icon name="heart-outline"></ion-icon>';
+          }
+          alert(`Favorite status updated for item: ${foodId}`);
+        });
+      });
     });
   </script>
 
