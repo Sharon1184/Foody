@@ -5,7 +5,6 @@
   <title>Food Details - Kibandaski</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -23,20 +22,31 @@
     };
   </script>
 
-  <!-- Ionicons -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
+
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body class="bg-bg text-text flex flex-col min-h-screen">
 
-  <!-- 🔥 Food Detail Section -->
+  <div class="p-4 bg-white shadow-md flex justify-between items-center">
+    <a href="index.html" class="flex items-center text-primary font-bold text-lg">
+      <ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>
+      Back
+    </a>
+    <a href="cart.html" class="relative text-dark">
+      <ion-icon name="cart-outline" class="text-3xl"></ion-icon>
+      <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+    </a>
+  </div>
+
   <main class="flex-1 p-4">
-    <div id="food-detail" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-4 text-center">
-      <p>Loading food details...</p>
+    <div id="food-detail" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-4">
+      <p class="text-center">Loading food details...</p>
     </div>
   </main>
 
-  <!-- 🔽 Bottom Navigation -->
   <nav class="bg-white border-t border-gray-200 fixed bottom-0 w-full z-50">
     <ul class="flex justify-around text-center py-2 text-gray-600">
       <li>
@@ -66,7 +76,6 @@
     </ul>
   </nav>
 
-  <!-- 🧠 Firebase Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
@@ -86,6 +95,13 @@
     const urlParams = new URLSearchParams(window.location.search);
     const foodId = urlParams.get("id");
     const foodDetailDiv = document.getElementById("food-detail");
+    const cartCountSpan = document.getElementById("cart-count");
+
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountSpan.textContent = totalItems;
+    }
 
     async function loadFoodDetail() {
       if (!foodId) {
@@ -102,27 +118,75 @@
       }
 
       const food = docSnap.data();
+      const foodWithId = { id: docSnap.id, ...food };
+
       foodDetailDiv.innerHTML = `
-        <img src="${food.imageUrl}" alt="${food.name}" class="w-full h-64 object-cover rounded-xl shadow-md mb-4" />
-        <h2 class="text-2xl font-bold">${food.name}</h2>
-        <p class="text-lg font-semibold text-primary mt-2">KES ${food.price}</p>
-        <p class="text-sm text-gray-600 mt-2">${food.description || "No description available."}</p>
-        <button class="mt-4 bg-primary text-white py-2 px-6 rounded-full shadow hover:bg-orange-700" onclick="addToCart(${JSON.stringify(food).replace(/"/g, '&quot;')})">
+        <img src="${foodWithId.imageUrl}" alt="${foodWithId.name}" class="w-full h-64 object-cover rounded-xl shadow-md mb-4" />
+        <h2 class="text-2xl font-bold">${foodWithId.name}</h2>
+        <p class="text-lg font-semibold text-primary mt-2">KES ${foodWithId.price}</p>
+        <div class="flex items-center justify-between mt-4">
+            <span class="text-sm text-gray-600">Restaurant: <strong>${foodWithId.restaurantName}</strong></span>
+            <span class="flex items-center text-yellow-500">
+                <ion-icon name="star" class="mr-1"></ion-icon>
+                ${foodWithId.rating}
+            </span>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">${foodWithId.description || "No description available."}</p>
+        
+        <div class="flex items-center justify-center mt-6">
+            <button id="quantity-minus" class="bg-gray-200 text-dark p-2 rounded-full h-10 w-10 flex items-center justify-center">-</button>
+            <span id="quantity-display" class="mx-4 text-2xl font-bold">1</span>
+            <button id="quantity-plus" class="bg-gray-200 text-dark p-2 rounded-full h-10 w-10 flex items-center justify-center">+</button>
+        </div>
+
+        <button id="add-to-cart-btn" class="mt-4 w-full bg-primary text-white py-3 px-6 rounded-full shadow hover:bg-orange-700 font-bold text-lg">
           Add to Cart
         </button>
       `;
-    }
 
-    loadFoodDetail();
+      // Event listeners for new features
+      const quantityDisplay = document.getElementById("quantity-display");
+      const quantityMinus = document.getElementById("quantity-minus");
+      const quantityPlus = document.getElementById("quantity-plus");
+      const addToCartBtn = document.getElementById("add-to-cart-btn");
+      let quantity = 1;
+
+      quantityMinus.addEventListener("click", () => {
+          if (quantity > 1) {
+              quantity--;
+              quantityDisplay.textContent = quantity;
+          }
+      });
+
+      quantityPlus.addEventListener("click", () => {
+          quantity++;
+          quantityDisplay.textContent = quantity;
+      });
+
+      addToCartBtn.addEventListener("click", () => {
+          addToCart(foodWithId, quantity);
+      });
+    }
 
     // 🛒 Add to cart (using localStorage)
-    window.addToCart = function (food) {
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ ...food, quantity: 1 });
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${food.name} added to cart`);
+    window.addToCart = function (food, quantity) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingItem = cart.find(item => item.id === food.id);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ ...food, quantity: quantity });
+        }
+        
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${quantity} of ${food.name} added to cart`);
+        updateCartCount();
     }
+    
+    updateCartCount();
+    loadFoodDetail();
   </script>
 
 </body>
-</html>
+  </html>
