@@ -1,11 +1,11 @@
-// Firebase configuration (replace with your actual config)
+// Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY", // Replace with your key
-    authDomain: "your-project-id.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project-id.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCV-S3g1v4yxQRaXYvXRUnfIuXzvdSDOjE",
+    authDomain: "food-ae7ff.firebaseapp.com",
+    projectId: "food-ae7ff",
+    storageBucket: "food-ae7ff.appspot.com",
+    messagingSenderId: "133155576693",
+    appId: "1:133155576693:web:2b244c5142e79f5eaf48b2"
 };
 
 // Initialize Firebase
@@ -29,14 +29,14 @@ async function fetchAndDisplayFoods() {
             return;
         }
 
-        menuList.innerHTML = ''; // Clear the "Loading..." message
+        menuList.innerHTML = '';
         foodSnapshot.forEach(doc => {
             const food = doc.data();
-            const foodId = doc.id; // Get the document ID
+            const foodId = doc.id;
             
             const foodCard = document.createElement('a');
             foodCard.classList.add('food-card');
-            foodCard.href = `food-details.html?id=${foodId}`; // Link to food details page
+            foodCard.href = `food-details.html?id=${foodId}`;
             
             foodCard.innerHTML = `
                 <img src="${food.imageUrl}" alt="${food.name}" class="food-img">
