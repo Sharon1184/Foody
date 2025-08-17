@@ -1,278 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kibandaski Deliveries</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kibandaski Deliveries</title>
 
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="top-toolbar">
-    <a href="add-food.html" class="toolbar-icon" title="Admin">
-      <ion-icon name="settings-outline"></ion-icon>
-    </a>
-    <a href="#" class="toolbar-icon" id="open-cart">
-      <ion-icon name="cart-outline"></ion-icon>
-    </a>
-    <a href="#" class="toolbar-icon">
-      <ion-icon name="person-outline"></ion-icon>
-    </a>
-  </div>
+  <div class="top-toolbar">
+    <a href="add-food.html" class="toolbar-icon" title="Admin">
+      <ion-icon name="settings-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon" id="open-cart">
+      <ion-icon name="cart-outline"></ion-icon>
+    </a>
+    <a href="#" class="toolbar-icon">
+      <ion-icon name="person-outline"></ion-icon>
+    </a>
+  </div>
 
-  <section class="delivery-location">
-    <div class="location-content">
-      <ion-icon name="location-outline"></ion-icon>
-      <span>Delivering to: <strong>Your Current Location</strong></span>
-      <button class="change-location-btn">Change</button>
-    </div>
-  </section>
+  <section class="delivery-location">
+    <div class="location-content">
+      <ion-icon name="location-outline"></ion-icon>
+      <span>Delivering to: <strong>Your Current Location</strong></span>
+      <button class="change-location-btn">Change</button>
+    </div>
+  </section>
 
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Delicious Meals Delivered</h2>
-      <p>Order from your favorite restaurants now</p>
-      <button>Order Now</button>
-    </div>
-    <img src="Rider.png" alt="Cathy Rider" class="bike-rider" />
-  </section>
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Delicious Meals Delivered</h2>
+      <p>Order from your favorite restaurants now</p>
+      <a href="menu.html"><button>Order Now</button></a>
+    </div>
+    <img src="Rider.png" alt="Cathy Rider" class="bike-rider" />
+  </section>
 
-  <section class="search-section">
-    <div class="search-box">
-      <ion-icon name="search-outline"></ion-icon>
-      <input type="text" id="searchInput" placeholder="Search food..." />
-    </div>
-  </section>
+  <section class="search-section">
+    <div class="search-box">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" id="searchInput" placeholder="Search food..." />
+    </div>
+  </section>
 
-  <section class="promo-banner">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGylMOXpT96APazatV6tSsDq7lX2oIniCZxA&s" alt="Promotional Offer" class="banner-img">
-    </section>
+  <section class="promo-banner">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGylMOXpT96APazatV6tSsDq7lX2oIniCZxA&s" alt="Promotional Offer" class="banner-img">
+    </section>
 
-  <section class="categories">
-    <h3>Browse by Category</h3>
-    <div class="category-carousel" id="category-list">
-      <div class="category-card active" data-category="All">
-        <ion-icon name="grid-outline"></ion-icon>
-        <span>All</span>
-      </div>
-      <div class="category-card" data-category="Main">
-        <ion-icon name="restaurant-outline"></ion-icon>
-        <span>Main Dishes</span>
-      </div>
-      <div class="category-card" data-category="Fast Food">
-        <ion-icon name="fast-food-outline"></ion-icon>
-        <span>Fast Food</span>
-      </div>
-      <div class="category-card" data-category="Pizza">
-        <ion-icon name="pizza-outline"></ion-icon>
-        <span>Pizza</span>
-      </div>
-      <div class="category-card" data-category="Seafood">
-        <ion-icon name="fish-outline"></ion-icon>
-        <span>Seafood</span>
-      </div>
-      <div class="category-card" data-category="Breakfast">
-        <ion-icon name="cafe-outline"></ion-icon>
-        <span>Breakfast</span>
-      </div>
-      <div class="category-card" data-category="Desserts">
-        <ion-icon name="ice-cream-outline"></ion-icon>
-        <span>Desserts</span>
-      </div>
-    </div>
-  </section>
+  <section class="categories">
+    <h3>Browse by Category</h3>
+    <div class="category-carousel" id="category-list">
+      <div class="category-card active" data-category="All">
+        <ion-icon name="grid-outline"></ion-icon>
+        <span>All</span>
+      </div>
+      <div class="category-card" data-category="Main">
+        <ion-icon name="restaurant-outline"></ion-icon>
+        <span>Main Dishes</span>
+      </div>
+      <div class="category-card" data-category="Fast Food">
+        <ion-icon name="fast-food-outline"></ion-icon>
+        <span>Fast Food</span>
+      </div>
+      <div class="category-card" data-category="Pizza">
+        <ion-icon name="pizza-outline"></ion-icon>
+        <span>Pizza</span>
+      </div>
+      <div class="category-card" data-category="Seafood">
+        <ion-icon name="fish-outline"></ion-icon>
+        <span>Seafood</span>
+      </div>
+      <div class="category-card" data-category="Breakfast">
+        <ion-icon name="cafe-outline"></ion-icon>
+        <span>Breakfast</span>
+      </div>
+      <div class="category-card" data-category="Desserts">
+        <ion-icon name="ice-cream-outline"></ion-icon>
+        <span>Desserts</span>
+      </div>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>Recommended For You</h3>
-    <div class="carousel-wrapper">
-      <div id="recommended-items" class="food-carousel">
-        <p>Loading...</p>
-      </div>
-    </div>
-    <div class="view-all-wrapper">
-      <a href="menu.html" class="view-all-btn">View All Foods</a>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>Recommended For You</h3>
+    <div class="carousel-wrapper">
+      <div id="recommended-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+    <div class="view-all-wrapper">
+      <a href="menu.html" class="view-all-btn">View All Foods</a>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>Top Restaurants in maseno <ion-icon name="restaurant-outline"></ion-icon></h3>
-    <div class="carousel-wrapper">
-      <div id="top-restaurants-items" class="food-carousel">
-        <div class="food-card">
-          <img src="https://via.placeholder.com/150x100?text=Restaurant+A" alt="Restaurant A" class="food-img">
-          <div class="food-info">
-            <h4>Java House</h4>
-            <p class="food-desc">Café & Diner</p>
-            <div class="food-meta">
-              <span><ion-icon name="star"></ion-icon> 4.6</span>
-              <span><ion-icon name="bicycle-outline"></ion-icon> 20 min</span>
-            </div>
-          </div>
-        </div>
-        <div class="food-card">
-          <img src="https://via.placeholder.com/150x100?text=Restaurant+B" alt="Restaurant B" class="food-img">
-          <div class="food-info">
-            <h4>Mama Oliech's</h4>
-            <p class="food-desc">Local Delicacies</p>
-            <div class="food-meta">
-              <span><ion-icon name="star"></ion-icon> 4.5</span>
-              <span><ion-icon name="bicycle-outline"></ion-icon> 25 min</span>
-            </div>
-          </div>
-        </div>
-        <div class="food-card">
-            <img src="https://via.placeholder.com/150x100?text=Restaurant+C" alt="Restaurant C" class="food-img">
-            <div class="food-info">
-              <h4>Pizza Inn</h4>
-              <p class="food-desc">Pizzas & Fast Food</p>
-              <div class="food-meta">
-                <span><ion-icon name="star"></ion-icon> 4.2</span>
-                <span><ion-icon name="bicycle-outline"></ion-icon> 30 min</span>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="view-all-wrapper">
-      <a href="restaurant.html" class="view-all-btn">View All Restaurants</a>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>Top Restaurants in maseno <ion-icon name="restaurant-outline"></ion-icon></h3>
+    <div class="carousel-wrapper">
+      <div id="top-restaurants-items" class="food-carousel">
+        <div class="food-card">
+          <img src="https://via.placeholder.com/150x100?text=Restaurant+A" alt="Restaurant A" class="food-img">
+          <div class="food-info">
+            <h4>Java House</h4>
+            <p class="food-desc">Café & Diner</p>
+            <div class="food-meta">
+              <span><ion-icon name="star"></ion-icon> 4.6</span>
+              <span><ion-icon name="bicycle-outline"></ion-icon> 20 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="food-card">
+          <img src="https://via.placeholder.com/150x100?text=Restaurant+B" alt="Restaurant B" class="food-img">
+          <div class="food-info">
+            <h4>Mama Oliech's</h4>
+            <p class="food-desc">Local Delicacies</p>
+            <div class="food-meta">
+              <span><ion-icon name="star"></ion-icon> 4.5</span>
+              <span><ion-icon name="bicycle-outline"></ion-icon> 25 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="food-card">
+            <img src="https://via.placeholder.com/150x100?text=Restaurant+C" alt="Restaurant C" class="food-img">
+            <div class="food-info">
+              <h4>Pizza Inn</h4>
+              <p class="food-desc">Pizzas & Fast Food</p>
+              <div class="food-meta">
+                <span><ion-icon name="star"></ion-icon> 4.2</span>
+                <span><ion-icon name="bicycle-outline"></ion-icon> 30 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="view-all-wrapper">
+      <a href="restaurant.html" class="view-all-btn">View All Restaurants</a>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>Most Sold This Week 🔥</h3>
-    <div class="carousel-wrapper">
-      <div id="most-sold-items" class="food-carousel">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>Most Sold This Week 🔥</h3>
+    <div class="carousel-wrapper">
+      <div id="most-sold-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>Top Rated 🌟</h3>
-    <div class="carousel-wrapper">
-      <div id="top-rated-items" class="food-carousel">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>Top Rated 🌟</h3>
+    <div class="carousel-wrapper">
+      <div id="top-rated-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>New This Week 🆕</h3>
-    <div class="carousel-wrapper">
-      <div id="new-items" class="food-carousel">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>New This Week 🆕</h3>
+    <div class="carousel-wrapper">
+      <div id="new-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </section>
 
-  <section class="recommendations">
-    <h3>Budget Meals 💸 (KES 100 or less)</h3>
-    <div class="carousel-wrapper">
-      <div id="budget-items" class="food-carousel">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </section>
+  <section class="recommendations">
+    <h3>Budget Meals 💸 (KES 100 or less)</h3>
+    <div class="carousel-wrapper">
+      <div id="budget-items" class="food-carousel">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </section>
 
-  <section class="recommendations" id="order-again-section">
-    <h3>Order Again <ion-icon name="sync-outline"></ion-icon></h3>
-    <div class="carousel-wrapper">
-      <div id="order-again-items" class="food-carousel">
-        <p>Login to see your past orders.</p>
-        </div>
-    </div>
-  </section>
+  <section class="recommendations" id="order-again-section">
+    <h3>Order Again <ion-icon name="sync-outline"></ion-icon></h3>
+    <div class="carousel-wrapper">
+      <div id="order-again-items" class="food-carousel">
+        <p>Login to see your past orders.</p>
+        </div>
+    </div>
+  </section>
 
-  <footer>
-    <div class="footer-socials">
-      <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-      <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
-      <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
-    </div>
-    <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
-  </footer>
+  <footer>
+    <div class="footer-socials">
+      <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+    </div>
+    <p>&copy; 2025 <strong>Kibandaski Deliveries</strong>. All rights reserved.</p>
+  </footer>
 
-  <nav class="bottom-nav">
-    <a href="#" class="nav-item">
-      <ion-icon name="home-outline"></ion-icon>
-      <span>Home</span>
-    </a>
-    <a href="#" class="nav-item">
-      <ion-icon name="storefront-outline"></ion-icon>
-      <span>Restaurants</span>
-    </a>
-    <a href="#" class="nav-item">
-      <ion-icon name="pricetags-outline"></ion-icon>
-      <span>Offers</span>
-    </a>
-  </nav>
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <ion-icon name="storefront-outline"></ion-icon>
+      <span>Restaurants</span>
+    </a>
+    <a href="#" class="nav-item">
+      <ion-icon name="pricetags-outline"></ion-icon>
+      <span>Offers</span>
+    </a>
+  </nav>
 
-  <div id="cart-modal" class="cart-modal">
-    <div class="cart-modal-content">
-      <span id="close-cart" class="close-cart">&times;</span>
-      <h3>Your Cart</h3>
-      <div id="cart-items" class="cart-items">
-        <p>No items in cart.</p>
-      </div>
-      <div class="cart-footer">
-        <p>Total: <span id="cart-total">KES 0</span></p>
-        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
-      </div>
-    </div>
-  </div>
-  <div id="food-detail-modal" class="food-detail-modal">
-    <div class="food-detail-content">
-        <span class="close-food-detail" id="close-food-detail">&times;</span>
-        <div class="detail-top-section">
-            <img id="food-detail-img" src="" alt="Food Image">
-        </div>
-        <div class="detail-info-section">
-            <h2 id="food-detail-name"></h2>
-            <p id="food-detail-desc"></p>
-            <p id="food-detail-restaurant">
-                <ion-icon name="restaurant-outline"></ion-icon> <span></span>
-            </p>
-            <p id="food-detail-rating">
-                <ion-icon name="star"></ion-icon> <span></span>
-            </p>
-            <div class="detail-actions">
-                <span id="food-detail-price"></span>
-                <button class="add-btn" id="add-to-cart-detail">
-                    <ion-icon name="add-outline"></ion-icon> Add to Cart
-                </button>
-            </div>
-        </div>
-    </div>
-  </div>
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-modal-content">
+      <span id="close-cart" class="close-cart">&times;</span>
+      <h3>Your Cart</h3>
+      <div id="cart-items" class="cart-items">
+        <p>No items in cart.</p>
+      </div>
+      <div class="cart-footer">
+        <p>Total: <span id="cart-total">KES 0</span></p>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+  <div id="food-detail-modal" class="food-detail-modal">
+    <div class="food-detail-content">
+        <span class="close-food-detail" id="close-food-detail">&times;</span>
+        <div class="detail-top-section">
+            <img id="food-detail-img" src="" alt="Food Image">
+        </div>
+        <div class="detail-info-section">
+            <h2 id="food-detail-name"></h2>
+            <p id="food-detail-desc"></p>
+            <p id="food-detail-restaurant">
+                <ion-icon name="restaurant-outline"></ion-icon> <span></span>
+            </p>
+            <p id="food-detail-rating">
+                <ion-icon name="star"></ion-icon> <span></span>
+            </p>
+            <div class="detail-actions">
+                <span id="food-detail-price"></span>
+                <button class="add-btn" id="add-to-cart-detail">
+                    <ion-icon name="add-outline"></ion-icon> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
 
-  <script>
-    const cartModal = document.getElementById('cart-modal');
-    const openCartBtn = document.getElementById('open-cart');
-    const closeCartBtn = document.getElementById('close-cart');
+  <script>
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
 
-    openCartBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      cartModal.style.display = 'flex';
-    });
+    openCartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      cartModal.style.display = 'flex';
+    });
 
-    closeCartBtn.addEventListener('click', () => {
-      cartModal.style.display = 'none';
-    });
+    closeCartBtn.addEventListener('click', () => {
+      cartModal.style.display = 'none';
+    });
 
-    window.addEventListener('click', (e) => {
-      if (e.target === cartModal) {
-        cartModal.style.display = 'none';
-      }
-    });
-  </script>
+    window.addEventListener('click', (e) => {
+      if (e.target === cartModal) {
+        cartModal.style.display = 'none';
+      }
+    });
+  </script>
 
-  <script type="module" src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
-    </html>
-
-
+</html>
